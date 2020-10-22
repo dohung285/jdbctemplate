@@ -23,8 +23,8 @@ public class DataOutputRepository {
 		builders.append("	    '20201021',							");
 		builders.append("	   " + i + ",							");
 		builders.append("	    'PC',							");
-		builders.append("	    'GIA COÂNG (OUTSOURCING)',							");
-		builders.append("	    'COÂNG TY TNHH MOÄT THAØNH VIEÂN PHUÏ LIEÄU GIAØY RUI TE',							");
+		builders.append("	    'GIA CÔNG (OUTSOURCING)',							");
+		builders.append("	    'Công ty TNHH VN SamHo',							");
 		builders.append("	    'OUTED',							");
 		builders.append("	    'PC.LINH',							");
 		builders.append("	    TO_DATE('2020/10/21 8:30:25', 'yyyy/mm/dd hh24:mi:ss'),							");
