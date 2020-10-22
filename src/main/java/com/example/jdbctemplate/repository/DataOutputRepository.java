@@ -16,6 +16,64 @@ public class DataOutputRepository {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public int saveHeader(int i) {
+
+		StringBuilder builders = new StringBuilder("");
+		builders.append("	INSERT INTO tb_out_header VALUES (	");
+		builders.append("	    '20201021',							");
+		builders.append("	   " + i + ",							");
+		builders.append("	    'PC',							");
+		builders.append("	    'GIA COÂNG (OUTSOURCING)',							");
+		builders.append("	    'COÂNG TY TNHH MOÄT THAØNH VIEÂN PHUÏ LIEÄU GIAØY RUI TE',							");
+		builders.append("	    'OUTED',							");
+		builders.append("	    'PC.LINH',							");
+		builders.append("	    TO_DATE('2020/10/21 8:30:25', 'yyyy/mm/dd hh24:mi:ss'),							");
+		builders.append("	    'Y',							");
+		builders.append("	    'ACC.HANH',							");
+		builders.append("	    TO_DATE('2020/10/21 21:02:44', 'yyyy/mm/dd hh24:mi:ss'),							");
+		builders.append("	    'SYSTEM    ',							");
+		builders.append("	    '4464',							");
+		builders.append("	    '',							");
+		builders.append("	    '',							");
+		builders.append("	    '',							");
+		builders.append("	    '',							");
+		builders.append("	    '',							");
+		builders.append("	    'Y',							");
+		builders.append("	    '61C-34132',							");
+		builders.append("	    'SH-RT 1-2020'	)						");
+
+		return jdbcTemplate.update(builders.toString());
+	}
+
+	public int saveDetail(int i, int indexHeader, int x, int y) {
+
+		StringBuilder strBuilder = new StringBuilder("");
+		strBuilder.append(
+				"	INSERT INTO tb_out_n_detail (OUT_LINE_NUM,OUT_NUM,OUT_NUM_DETAIL,ITEM_CODE,DESCRIPTION,UOM,QTY,EXCHANGE,REMAR,IN_ID,IN_DATE,PROG_ID,RETURN_QTY,RETURN_ID,RETURN_DATE,RENEW_ID,RENEW_DATE,ACC_FLAG,ACC_ID)  VALUES ( ");
+		strBuilder.append("	        " + i + ",				");
+		strBuilder.append("	        " + indexHeader + ",				");
+		strBuilder.append("	        " + x + ",				");
+		strBuilder.append("	        '',				");
+		strBuilder.append("	        'M-Y6-TEST-01',				");
+		strBuilder.append("	        'PRS',				");
+		strBuilder.append("	        " + i * 10 + ",				");
+		strBuilder.append("	        '',				");
+		strBuilder.append("	        'REMAR-TEST-01',				");
+		strBuilder.append("	        'PC.LINH',				");
+		strBuilder.append("	        TO_DATE('2020/10/21 8:30:25', 'yyyy/mm/dd hh24:mi:ss'),				");
+		strBuilder.append("	        'w_puor241r',				");
+		strBuilder.append("	        " + 0 + ",				");
+		strBuilder.append("	        '',				");
+		strBuilder.append("	        TO_DATE('2020/10/21 8:30:25', 'yyyy/mm/dd hh24:mi:ss'),				");
+		strBuilder.append("	        'ACC.HANH',				");
+		strBuilder.append("	        TO_DATE('2020/10/21 8:30:25', 'yyyy/mm/dd hh24:mi:ss'),				");
+		strBuilder.append("	        'Y',				");
+		strBuilder.append("	        'ACC.HANH'				");
+		strBuilder.append("	    )				");
+
+		return jdbcTemplate.update(strBuilder.toString());
+	}
+
 	// Update 4 truong theo yeu cau
 //	ACC_MODEL 	ACC_SYMBOL	ACC_NUMBER 	ACC_DATE
 	public int update4Filed(String accModel, String accSymbol, String accNumberl, Date accDate, long outNum) {
@@ -49,6 +107,10 @@ public class DataOutputRepository {
 		builder.append("	WHERE A.OUT_NUM = B.OUT_NUM							");
 		builder.append("	AND A.ACC_FLAG = 'Y'							");
 		builder.append("	AND A.PRINT_FLAG = 'Y'							");
+		builder.append(" 	AND A.ACC_MODEL IS  NULL	");
+		builder.append(" 	AND A.ACC_SYMBOL IS  NULL 	");
+		builder.append(" 	AND A.ACC_NUMBER IS  NULL 	");
+		builder.append(" 	AND A.ACC_DATE IS  NULL ");
 
 		if (maxNewOutNum == 0L) {
 			builder.append("	AND A.OUT_NUM <= ?	");
@@ -106,8 +168,6 @@ public class DataOutputRepository {
 
 //		List<DataOutput> query = jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<DataOutput>(DataOutput.class), maxOutNum);  
 //	    return (List<DataOutput>) DataAccessUtils.uniqueResult(query); 
-
-		// Cập nhập lại 4 trường
 
 	}
 

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class ReuqestObj {
 
 @JsonProperty("doanhnghiep_mst")
-private String doanhnghiepMst;
+private String doanhnghiep_mst;
 
 @JsonProperty("loaihoadon_ma")
 private String loaihoadon_ma;
@@ -32,19 +32,23 @@ private String ma_hoadon;
 private String ngaylap;
 
 @JsonProperty("vanchuyen_so")
-private String vanchuyenSo;
+private String vanchuyen_so;
 
 @JsonProperty("vanchuyen_ngayxuat")
 private String vanchuyen_ngayxuat;
 
 @JsonProperty("vanchuyen_khoxuat")
-private String vanchuyenKhoxuat;
+private String vanchuyen_khoxuat;
 
 @JsonProperty("vanchuyen_khonhap")
-private String vanchuyenKhonhap;
+private String vanchuyen_khonhap;
 
 @JsonProperty("tongtien_chuavat")
 private Integer tongtien_chuavat;
+
+//vanchuyen_giaohang
+@JsonProperty("vanchuyen_giaohang")
+private String vanchuyen_giaohang;
 
 @JsonProperty("tienthue")
 private Integer tienthue;
@@ -57,14 +61,24 @@ private List<Dschitiet> dschitiet = null;
 @JsonIgnore
 private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+
+@JsonProperty("vanchuyen_giaohang")
+public String getVanchuyen_giaohang() {
+	return vanchuyen_giaohang;
+}
+@JsonProperty("vanchuyen_giaohang")
+public void setVanchuyen_giaohang(String vanchuyen_giaohang) {
+	this.vanchuyen_giaohang = vanchuyen_giaohang;
+}
+
 @JsonProperty("doanhnghiep_mst")
 public String getDoanhnghiepMst() {
-return doanhnghiepMst;
+return doanhnghiep_mst;
 }
 
 @JsonProperty("doanhnghiep_mst")
 public void setDoanhnghiepMst(String doanhnghiepMst) {
-this.doanhnghiepMst = doanhnghiepMst;
+this.doanhnghiep_mst = doanhnghiepMst;
 }
 
 @JsonProperty("loaihoadon_ma")
@@ -119,12 +133,12 @@ this.ngaylap = ngaylap;
 
 @JsonProperty("vanchuyen_so")
 public String getVanchuyenSo() {
-return vanchuyenSo;
+return vanchuyen_so;
 }
 
 @JsonProperty("vanchuyen_so")
 public void setVanchuyenSo(String vanchuyenSo) {
-this.vanchuyenSo = vanchuyenSo;
+this.vanchuyen_so = vanchuyenSo;
 }
 
 @JsonProperty("vanchuyen_ngayxuat")
@@ -139,22 +153,22 @@ this.vanchuyen_ngayxuat = vanchuyenNgayxuat;
 
 @JsonProperty("vanchuyen_khoxuat")
 public String getVanchuyenKhoxuat() {
-return vanchuyenKhoxuat;
+return vanchuyen_khoxuat;
 }
 
 @JsonProperty("vanchuyen_khoxuat")
 public void setVanchuyenKhoxuat(String vanchuyenKhoxuat) {
-this.vanchuyenKhoxuat = vanchuyenKhoxuat;
+this.vanchuyen_khoxuat = vanchuyenKhoxuat;
 }
 
 @JsonProperty("vanchuyen_khonhap")
 public String getVanchuyenKhonhap() {
-return vanchuyenKhonhap;
+return vanchuyen_khonhap;
 }
 
 @JsonProperty("vanchuyen_khonhap")
 public void setVanchuyenKhonhap(String vanchuyenKhonhap) {
-this.vanchuyenKhonhap = vanchuyenKhonhap;
+this.vanchuyen_khonhap = vanchuyenKhonhap;
 }
 
 @JsonProperty("tongtien_chuavat")

@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,19 +63,21 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	@Override
 	public void run(String... args) throws Exception {
-		myRunMethod();
+		//myRunMethod();
+		
+		saveDataIntoDatabase();
 
 	}
 
 	// Auto callback once every 5 minutes = 5 * 60 * 1000 millis
-	@Scheduled(fixedRate = 5000L)
+	@Scheduled(fixedRate = 30000L)
 	private void myRunMethod() {
 		logger.info("*************************************: Bat dau chay app");
 
 		// lan dau tien chay ghi gia tri ra file
 		File file = new File(FILENAME);
-
 		List<DataOutput> listSource = null;
+
 		try {
 
 			if (!file.exists()) {
@@ -90,7 +95,6 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				// System.out.println("LINE " + strMaxOutNum);
 				long maxOldOutNum = Long.parseLong(strMaxOutNum);
 				long maxNewOutNum = dataOutputRepository.getMaxSequence();
-				System.out.println("OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
 				logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
 
 				// Call API - BILL - lay dc listSource
@@ -98,6 +102,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
 			} // end else
 
+			// List luu OutNum distinct
 			List<BigDecimal> listout = new ArrayList<BigDecimal>();
 			BigDecimal outindex = new BigDecimal(0);
 			for (DataOutput item : listSource) {
@@ -106,6 +111,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				}
 				outindex = item.getOutNum();
 			}
+			int indexListOutNum = 0;
 			for (BigDecimal itemoutnum : listout) {
 				BigDecimal outNum = new BigDecimal(0);
 				outNum = itemoutnum;
@@ -120,77 +126,138 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				bodyRequest.setKyhieu("QQ/20E");
 
 				File fileMHD = new File(FILEmaHD);
-				long maHD = Long.parseLong(FileUtils.readFile(fileMHD)) + 1;
-				bodyRequest.setMaHoadon(maHD + ""); // doc tu file
+				// long maHD = Long.parseLong(FileUtils.readFile(fileMHD)) + 1;
+				// bodyRequest.setMaHoadon(maHD + ""); // doc tu file
+				bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
 				// ghi lai vao file gia tri vua su dung
-				FileUtils.writeFile(fileMHD, false, maHD + "");
+				FileUtils.writeFile(fileMHD, false, String.valueOf(listout.get(indexListOutNum)));
 
-				bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
-				bodyRequest.setVanchuyenSo(itemlistofoutnum.get(0).getNumberContract());
-				bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
-				bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
-				bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+				if (Objects.isNull(itemlistofoutnum.get(0).getDat()) || itemlistofoutnum.get(0).getDat().isEmpty()) {
+					logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
+				} else if (Objects.isNull(itemlistofoutnum.get(0).getNumberContract()) || itemlistofoutnum.get(0).getNumberContract().isEmpty()) {
+					logger.info("***************: NUMBER_CONTRACT = NULL tai OUT_NUM := " + outNum);
+				} else if (Objects.isNull(itemlistofoutnum.get(0).getDat()) || itemlistofoutnum.get(0).getDat().isEmpty()) {
+					logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
+				} else if (Objects.isNull(itemlistofoutnum.get(0).getReason()) || itemlistofoutnum.get(0).getReason().isEmpty()) {
+					logger.info("***************: RESON = NULL tai OUT_NUM := " + outNum);
+				} else if (Objects.isNull(itemlistofoutnum.get(0).getForCompany()) || itemlistofoutnum.get(0).getForCompany().isEmpty()) {
+					logger.info("***************: ForCompany = NULL tai OUT_NUM := " + outNum);
+				} else {
+					bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
+					bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
+					bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
+					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
+					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
 
-				bodyRequest.setTongtienChuavat(0);
-				bodyRequest.setTienthue(0);
-				bodyRequest.setTongtienCovat(0);
+					bodyRequest.setTongtienChuavat(0);
+					bodyRequest.setTienthue(0);
+					bodyRequest.setTongtienCovat(0);
 
-				List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
-				for (DataOutput itemfilter : itemlistofoutnum) {
+					List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
+					for (DataOutput itemfilter : itemlistofoutnum) {
 
-					Dschitiet ct = new Dschitiet();
-					ct.setTen(itemfilter.getRemar());
-					ct.setDonvitinh(itemfilter.getUom());
-					ct.setSoluong(itemfilter.getQty());
+						Dschitiet ct = new Dschitiet();
+						if (
+								Objects.isNull(itemfilter.getRemar()) || 
+								Objects.isNull(itemfilter.getUom()) || 
+								Objects.isNull(itemfilter.getQty()) ||
+								itemfilter.getRemar().isEmpty() ||
+								itemfilter.getUom().isEmpty()
+								
+							) {
+							logger.info("***************:NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
+							return;
 
-					lChitiet.add(ct);
+						} else {
+							ct.setTen(itemfilter.getRemar());
+							ct.setDonvitinh(itemfilter.getUom());
+							ct.setSoluong(itemfilter.getQty());
+							ct.setVanchuyen_loai(1);
+						}
+
+						lChitiet.add(ct);
+
+					}
+					bodyRequest.setDschitiet(lChitiet);
+
+					String jsonbody = new Gson().toJson(bodyRequest);
+					logger.info("***************: Thong tin gui di la:   "
+							+ DatatypeConverter.printBase64Binary(jsonbody.getBytes()));
+					File fileToken = new File(FILEtoken);
+					if (!fileToken.exists()) {
+						logger.info("***************: File token.txt chua ton tai");
+						fileToken.createNewFile();
+					}
+					String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
+							" Bearer " + FileUtils.readFile(fileToken));
+					logger.info("***************: Ket qua CALL API- BILL :  " + result);
+
+					if (!result.equals("3")) {
+
+						JSONObject json = new JSONObject(result);
+						JSONObject objectResult = new JSONObject();
+						objectResult = json.getJSONObject("result");
+
+						if (objectResult.get("mauso").equals(null) || objectResult.get("kyhieu").equals(null)
+								|| objectResult.get("sohoadon").equals(null)
+								|| objectResult.get("ngayky").equals(null)) {
+							logger.error("***************: NULL  ");
+						} else {
+
+							long outNumLong = outNum.longValue();
+							try {
+								int x = dataOutputRepository.update4Filed(
+										objectResult.optString(objectResult.getString("mauso"), ""),
+										objectResult.optString(objectResult.getString("kyhieu"), ""),
+										objectResult.optString(objectResult.getString("sohoadon"), ""),
+										new SimpleDateFormat("dd/MM/YYYY")
+												.parse(objectResult.optString(objectResult.getString("ngayky"), "")),
+										outNumLong);
+								if (x > 0) {
+									logger.info(
+											"***************: Ket qua UPDATE 4 truong la:   " + x + " Thanh cong!!");
+								} else {
+									logger.error("***************: Ket qua UPDATE 4 truong la:   " + x + " That bai!!");
+								}
+
+							} catch (JSONException e) {
+								logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass()
+										+ "line: 170 ");
+							} catch (ParseException e) {
+								logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass()
+										+ "line: 173 ");
+							}
+							logger.info("***************: Ket thuc :***********************");
+							// Tang chi so cua indexOutNum len de ki lan tiep theo
+							indexListOutNum++;
+						}
+
+					} // end if
 
 				}
-				bodyRequest.setDschitiet(lChitiet);
 
-				String jsonbody = new Gson().toJson(bodyRequest);
-				logger.info("***************: Thong tin gui di la:   " + jsonbody);
-				File fileToken = new File(FILEtoken);
-				if (!fileToken.exists()) {
-					logger.info("***************: File token.txt chua ton tai");
-					fileToken.createNewFile();
-				}
-				String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
-						" Bearer " + FileUtils.readFile(fileToken));
-				logger.info("***************: Ket qua CALL API- BILL :  " + result);
-
-				if (!isJSONValid(result)) {
-					logger.error("***************: Loi khong dung dinh dang JSON - line 167 :  ");
-					return;
-				}
-
-				JSONObject json = new JSONObject(result);
-				JSONObject objectResult = new JSONObject();
-				objectResult = json.getJSONObject("result");
-				System.out.println(objectResult.getString("mauso"));
-				System.out.println(objectResult.getString("kyhieu"));
-				System.out.println(objectResult.getString("sohoadon"));
-				System.out.println(objectResult.getString("ngayky"));
-
-				long outNumLong = outNum.longValue();
-				try {
-					int x = dataOutputRepository.update4Filed(objectResult.getString("mauso"),
-							objectResult.getString("kyhieu"), objectResult.getString("sohoadon"),
-							new SimpleDateFormat("dd/MM/YYYY").parse(objectResult.getString("ngayky")), outNumLong);
-					logger.info("***************: Ket qua UPDATE 4 truong la:   " + x);
-				} catch (JSONException e) {
-					logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass() + "line: 170 ");
-					e.printStackTrace();
-				} catch (ParseException e) {
-					logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass() + "line: 173 ");
-					e.printStackTrace();
-				}
 			}
 
 		} catch (IOException e) {
 			logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass() + "line: 179 ");
 			e.printStackTrace();
 		}
+
+	}
+
+	private void saveDataIntoDatabase() {
+		// dataOutputRepository.saveDetail(2, 2, 2, 2);
+		for (int i = 20016; i <= 20018; i++) {
+			dataOutputRepository.saveHeader(i);
+
+			for (int j = 1; j < 3; j++) {
+				int x = j;
+				int y = j;
+				dataOutputRepository.saveDetail(j, i, x, y);
+			}
+
+		}
+		System.out.println("DONE!");
 
 	}
 

@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import sun.font.CreatedFontTracker;
 
 public class Utils {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
 	public static String SendDatahttps(String url, String inputsent, String auth) {
@@ -84,8 +84,9 @@ public class Utils {
 			try {
 				os.write(inputsent.getBytes());
 			} catch (IOException e) {
+				logger.error("***************: Loi:  " + e.getMessage());
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 
 			os.flush();
@@ -111,6 +112,7 @@ public class Utils {
 			conn.disconnect();
 			return kq.toString();
 		} catch (Exception ex) {
+			logger.error("***************: Loi:  " + ex.getMessage());
 			System.out.println(ex.getMessage());
 			return "2";
 		}
@@ -139,11 +141,10 @@ public class Utils {
 				TokenUtils.getAccessToken();
 			}
 
-			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				System.out.println(conn.getResponseCode());
-				// return "1";
-
-			}
+//			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//				System.out.println(conn.getResponseCode());
+//				// return "1";
+//			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
