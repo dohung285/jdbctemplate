@@ -120,15 +120,20 @@ public class Utils {
 
 	public static String connectServer(String urlstr, String inputsent, String auth) {
 		try {
-
+			logger.info(urlstr);
+			logger.info(auth);
+			logger.info(inputsent);
 			URL url = new URL(urlstr);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json");
+			
+			conn.setRequestProperty("accept", "text/plain");
+			conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 			if (auth == null || auth.trim().equals("")) {
 
 			} else {
+				logger.info("Auth:"+auth);
 				conn.addRequestProperty("Authorization", auth);
 			}
 			String input = inputsent;
@@ -138,13 +143,14 @@ public class Utils {
 			os.flush();
 
 			if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+				logger.error("***************: Loi :   " + 401);
 				TokenUtils.getAccessToken();
 			}
 
-//			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-//				System.out.println(conn.getResponseCode());
-//				// return "1";
-//			}
+			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+				System.out.println(conn.getResponseCode());
+				 return "3";
+			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
@@ -164,11 +170,11 @@ public class Utils {
 			return output2;
 
 		} catch (MalformedURLException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			logger.error("***************: Loi :   " + e.getMessage());
 			return "2";
 		} catch (IOException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			logger.error("***************: Loi :   " + e.getMessage());
 			return "3";
 		}

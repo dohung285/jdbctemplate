@@ -17,9 +17,11 @@ public class FileUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
+	public static String tokenWS = "";
+	
 	// Ghi gile
 	public static void writeFile(File file, boolean flag, String value) {
-		logger.info("***************: CALL-METHOD ghi file ");
+		//logger.info("***************: CALL-METHOD ghi file ");
 		FileWriter fileWriter;
 		try {
 			fileWriter = new FileWriter(file, flag);
@@ -34,7 +36,7 @@ public class FileUtils {
 
 	// Doc File
 	public static String readFile(File file) {
-		logger.info("***************: CALL-METHOD doc file ");
+		//logger.info("***************: CALL-METHOD doc file ");
 		FileReader fileReader = null;
 		String strMaxOutNum = null;
 		try {
@@ -54,6 +56,7 @@ public class FileUtils {
 			logger.error("***************: loi : line 54 " + e.getMessage() + "=====" + e.getClass());
 			e.printStackTrace();
 		} catch (IOException e) {
+		
 			logger.error("***************: loi : line 57 " + e.getMessage() + "=====" + e.getClass());
 			e.printStackTrace();
 		}

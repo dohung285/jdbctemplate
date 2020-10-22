@@ -47,12 +47,12 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 	@Autowired
 	Environment env;
 
-	private static final String FILENAME = "C:/LogAppJDBCTemplate/maxOutNum.txt";
+	private static final String FILENAME = "D:/maxOutNum.txt";
 //	private static final String FILEmaHD = "C:/LogAppJDBCTemplate/maHoaDon.txt";
 
 //	private static final String FILENAME = "maxOutNum.txt";
 	private static final String FILEmaHD = "maHoaDon.txt";
-	private static final String FILEtoken = "C:/LogAppJDBCTemplate/token.txt";
+	private static final String FILEtoken = "D:/token.txt";
 
 //	@Autowired
 //	RestTemplate restTemplate;    
@@ -63,12 +63,12 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	@Override
 	public void run(String... args) throws Exception {
-		//myRunMethod();
+		myRunMethod();
 		
-		saveDataIntoDatabase();
+		//saveDataIntoDatabase();
 
 	}
-
+	
 	// Auto callback once every 5 minutes = 5 * 60 * 1000 millis
 	@Scheduled(fixedRate = 30000L)
 	private void myRunMethod() {
@@ -91,9 +91,15 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 			} else {
 				logger.info("***************: File maxOutNum.txt da ton tai. ");
-				String strMaxOutNum = FileUtils.readFile(file);
-				// System.out.println("LINE " + strMaxOutNum);
-				long maxOldOutNum = Long.parseLong(strMaxOutNum);
+				//String strMaxOutNum = FileUtils.readFile(file);
+				String strMaxOutNum = org.apache.commons.io.FileUtils.readFileToString(file);
+				long maxOldOutNum = 0;
+				try {
+					 maxOldOutNum = Long.parseLong(strMaxOutNum);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 				long maxNewOutNum = dataOutputRepository.getMaxSequence();
 				logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
 
@@ -146,8 +152,8 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 					bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
 					bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
 					bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
-					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
-					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+					bodyRequest.setVanchuyenKhoxuat(DatatypeConverter.printBase64Binary(itemlistofoutnum.get(0).getReason().getBytes()));
+					bodyRequest.setVanchuyenKhonhap(DatatypeConverter.printBase64Binary(itemlistofoutnum.get(0).getForCompany().getBytes()));
 
 					bodyRequest.setTongtienChuavat(0);
 					bodyRequest.setTienthue(0);
@@ -189,7 +195,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						fileToken.createNewFile();
 					}
 					String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
-							" Bearer " + FileUtils.readFile(fileToken));
+							" Bearer " + FileUtils.tokenWS);
 					logger.info("***************: Ket qua CALL API- BILL :  " + result);
 
 					if (!result.equals("3")) {
@@ -201,14 +207,14 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						if (objectResult.get("mauso").equals(null) || objectResult.get("kyhieu").equals(null)
 								|| objectResult.get("sohoadon").equals(null)
 								|| objectResult.get("ngayky").equals(null)) {
-							logger.error("***************: NULL  ");
+							logger.error("***************: NULL line-204 ");
 						} else {
 
 							long outNumLong = outNum.longValue();
 							try {
 								int x = dataOutputRepository.update4Filed(
-										objectResult.optString(objectResult.getString("mauso"), ""),
-										objectResult.optString(objectResult.getString("kyhieu"), ""),
+										DatatypeConverter.printBase64Binary(objectResult.optString(objectResult.getString("mauso"), "").getBytes()),
+										DatatypeConverter.printBase64Binary(objectResult.optString(objectResult.getString("kyhieu"), "").getBytes()),
 										objectResult.optString(objectResult.getString("sohoadon"), ""),
 										new SimpleDateFormat("dd/MM/YYYY")
 												.parse(objectResult.optString(objectResult.getString("ngayky"), "")),
@@ -247,10 +253,10 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	private void saveDataIntoDatabase() {
 		// dataOutputRepository.saveDetail(2, 2, 2, 2);
-		for (int i = 20016; i <= 20018; i++) {
+		for (int i = 20030; i <= 20040; i++) {
 			dataOutputRepository.saveHeader(i);
 
-			for (int j = 1; j < 3; j++) {
+			for (int j = 1; j < 10; j++) {
 				int x = j;
 				int y = j;
 				dataOutputRepository.saveDetail(j, i, x, y);

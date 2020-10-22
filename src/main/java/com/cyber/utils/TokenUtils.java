@@ -22,15 +22,15 @@ public class TokenUtils {
 	public static void getAccessToken() {
 
 //		File file = new File("token.txt");
-		File file = new File("C:/LogAppJDBCTemplate/token.txt");
-		if (!file.exists()) {
-			logger.info("***************: File token.txt chua ton tai");
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				logger.error("***************: File token.txt tao loi");
-			}
-		}
+	//	File file = new File("C:/LogAppJDBCTemplate/token.txt");
+//		if (!file.exists()) {
+//			logger.info("***************: File token.txt chua ton tai");
+//			try {
+//				file.createNewFile();
+//			} catch (IOException e) {
+//				logger.error("***************: File token.txt tao loi");
+//			}
+//		}
 		RequestAccount reqAccount = new RequestAccount();
 
 		reqAccount.setDoanhnghiepMst("0303030303");
@@ -48,7 +48,8 @@ public class TokenUtils {
 		logger.info("***************: Lay duoc access_token: " + objectResult.getString("access_token"));
 		System.out.println(objectResult.getString("access_token"));
 		// Luu token vào file
-		FileUtils.writeFile(file, false, objectResult.getString("access_token"));
+		//FileUtils.writeFile(file, false, objectResult.getString("access_token"));
+		FileUtils.tokenWS = objectResult.getString("access_token");
 		logger.info("***************: Luu access_token vao file thanh cong ");
 
 	}
