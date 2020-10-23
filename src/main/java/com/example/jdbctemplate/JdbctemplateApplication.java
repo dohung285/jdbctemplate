@@ -25,7 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -49,14 +51,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 	Environment env;
 
 	private static final String FILENAME = "D:/maxOutNum.txt";
-//	private static final String FILEmaHD = "C:/LogAppJDBCTemplate/maHoaDon.txt";
+//	private static final String FILEmaHD = "C:/LogAppJDBCTemplate/maHoaDon.txt";   
 
 //	private static final String FILENAME = "maxOutNum.txt";
 	private static final String FILEmaHD = "maHoaDon.txt";
 	private static final String FILEtoken = "D:/token.txt";
-
-//	@Autowired
-//	RestTemplate restTemplate;    
 
 	public static void main(String[] args) {
 		SpringApplication.run(JdbctemplateApplication.class, args);
@@ -64,15 +63,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	@Override
 	public void run(String... args) throws Exception {
-		// myRunMethod();
-
-		// saveDataIntoDatabase();
-//		String s = "GIA CÔNG";
-//		byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
-//
-//		String utf8EncodedString = new String(bytes, StandardCharsets.UTF_8);
-//		System.out.println(utf8EncodedString);
-//		logger.info(utf8EncodedString);
+		 myRunMethod();
 
 	}
 
@@ -264,21 +255,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	}
 
-	private void saveDataIntoDatabase() {
-		// dataOutputRepository.saveDetail(2, 2, 2, 2);
-		for (int i = 20041; i <= 20051; i++) {
-			dataOutputRepository.saveHeader(i);
-
-			for (int j = 1; j < 10; j++) {
-				int x = j;
-				int y = j;
-				dataOutputRepository.saveDetail(j, i, x, y);
-			}
-
-		}
-		System.out.println("DONE!");
-
-	}
+	
 
 	public boolean isJSONValid(String test) {
 		try {
