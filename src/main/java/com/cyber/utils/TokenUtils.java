@@ -33,13 +33,13 @@ public class TokenUtils {
 //		}
 		RequestAccount reqAccount = new RequestAccount();
 
-		reqAccount.setDoanhnghiepMst("0303030303");
-		reqAccount.setUsername("0303030303@ktt");
+		reqAccount.setDoanhnghiepMst("0300812669");
+		reqAccount.setUsername("0300812669@kws");
 		reqAccount.setPassword("12345678");
 
 		String jsonBodyAccount = new Gson().toJson(reqAccount);
 		logger.info("***************: Thong tin gui di de lay ACCESS_TOKEN :   " + jsonBodyAccount);
-		String result = Utils.connectServer("http://demows.cyberbill.vn/api/services/hddtws/Authentication/GetToken",
+		String result = Utils.connectServer("http://hddtws.esamho.com/api/services/hddtws/Authentication/GetToken",
 				jsonBodyAccount, null);
 
 		JSONObject json = new JSONObject(result);

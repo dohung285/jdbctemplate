@@ -28,6 +28,7 @@ public class FileUtils {
 			BufferedWriter bw = new BufferedWriter(fileWriter);
 			bw.write(value);
 			bw.close();
+
 		} catch (IOException e) {
 			logger.error("***************: loi : line 30 " + e.getMessage() + "=====" + e.getClass());
 			e.printStackTrace();

@@ -1,10 +1,4 @@
 
-INSERT INTO `demo`.`employee` (`email`, `first_name`, `last_name`) VALUES ('a@gmail.com', 'do', 'hung');
-INSERT INTO `demo`.`employee` (`email`, `first_name`, `last_name`) VALUES ('b@gmail.com', 'do', 'hung');
-INSERT INTO `demo`.`employee` (`email`, `first_name`, `last_name`) VALUES ('c@gmail.com', 'do', 'hung');
-INSERT INTO `demo`.`employee` (`email`, `first_name`, `last_name`) VALUES ('d@gmail.com', 'do', 'hung');
-
-
 CREATE TABLE TB_OUT_HEADER
 ( 
 	DAT			VARCHAR2(8) NOT NULL,
@@ -89,6 +83,18 @@ CREATE TABLE TB_OUT_N_DETAIL
 
 Chú ý khi deploy lên hệ thống thật phải thêm các schema vào các câu truy vấn!
 và thêm 4 điều kiện null nữa do ở db test ko có dữ liệu đó
+
+
+ INSERT INTO TB_OUT_HEADER VALUES ('20201103','8541','IT','FOR PACKING','Cöûa haøng Leâ Quang Kieåm','OUTED','TEST',TO_DATE('2020/03/11 11:29:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST',TO_DATE('2020/03/11 11:30:00', 'YYYY/MM/DD HH24:MI:SS'),'','168','','','','','','Y','51LD-23345','SAMHO-202009');
+ INSERT INTO TB_OUT_HEADER VALUES ('20201103','8579','BIZ-AD','AN GIANG DIRECT ORDER','PT.Pratama Abadi Industri','OUTED','TEST',TO_DATE('2020/03/11 11:29:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST',TO_DATE('2020/03/11 11:30:00', 'YYYY/MM/DD HH24:MI:SS'),'','180','','','','','','Y','50XD-223131','SRH0002');
+
+
+
+ INSERT INTO TB_OUT_N_DETAIL VALUES ('31208','8541','1','','MX368-V5','CAÙI','4','','HAØNG MAÃU','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'w_puor241r','','','','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST')													;
+ INSERT INTO TB_OUT_N_DETAIL VALUES ('31209','8541','2','','TEST - HAØNGBUF','CAÙI','2','','TEÙT','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'w_puor241r','','','','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST')													;
+ INSERT INTO TB_OUT_N_DETAIL VALUES ('31382','8579','1','','PANDA SUEDE WPN 44" 088A','M','6','','DA NHAÂN TAÏO','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'w_puor241r','','','','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST')													;
+ INSERT INTO TB_OUT_N_DETAIL VALUES ('31383','8579','2','','PANDA SUEDE WPN 44" A5J6','M','12','','DA NHAÂN TAÏO','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'w_puor241r','','','','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST')													;
+ INSERT INTO TB_OUT_N_DETAIL VALUES ('31384','8579','3','','PANDA SUEDE WPN 44" BLK','M','39','','DA NHAÂN TAÏO','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'w_puor241r','','','','TEST',TO_DATE('2020/03/11 13:30:00', 'YYYY/MM/DD HH24:MI:SS'),'Y','TEST')													;
 
 
 
