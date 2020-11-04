@@ -259,7 +259,7 @@ public class DataOutputRepository {
 		builder.append("			,A.ACC_FLAG					");
 		builder.append("			,A.PRINT_FLAG					");
 		builder.append("	        , SUM (b.qty)	as QTY						");
-		builder.append("		from TB_OUT_HEADER A, MES.TB_OUT_N_DETAIL B						");
+		builder.append("		from TB_OUT_HEADER A, TB_OUT_N_DETAIL B						");
 		builder.append("	WHERE A.OUT_NUM = B.OUT_NUM							");
 		builder.append("	AND A.ACC_FLAG = 'Y'							");
 		builder.append("	AND A.PRINT_FLAG = 'Y'							");
@@ -299,7 +299,7 @@ public class DataOutputRepository {
 			builder.append("			,A.PRINT_FLAG		");
 
 			System.out.println(builder.toString());
-			System.out.println("NOT NULL");
+//			System.out.println("NOT NULL");
 
 
 			return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper(DataOutput.class),

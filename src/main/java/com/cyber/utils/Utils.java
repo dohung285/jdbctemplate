@@ -20,164 +20,163 @@ import javax.security.cert.X509Certificate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sun.font.CreatedFontTracker;
 
 public class Utils {
 
-	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
-	public static String SendDatahttps(String url, String inputsent, String auth) {
-		try {
-			X509TrustManager tm = new X509TrustManager() {
-				@Override
-				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
+    public static String SendDatahttps(String url, String inputsent, String auth) {
+        try {
+            X509TrustManager tm = new X509TrustManager() {
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
 
-				public void checkServerTrusted(X509Certificate[] paramArrayOfX509Certificate, String paramString)
-						throws CertificateException {
+                public void checkServerTrusted(X509Certificate[] paramArrayOfX509Certificate, String paramString)
+                        throws CertificateException {
 
-				}
+                }
 
-				public void checkClientTrusted(X509Certificate[] paramArrayOfX509Certificate, String paramString)
-						throws CertificateException {
-				}
+                public void checkClientTrusted(X509Certificate[] paramArrayOfX509Certificate, String paramString)
+                        throws CertificateException {
+                }
 
-				@Override
-				public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
-						throws CertificateException {
-					// TODO Auto-generated method stub
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                        throws CertificateException {
+                    // TODO Auto-generated method stub
 
-				}
+                }
 
-				@Override
-				public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
-						throws CertificateException {
-					// TODO Auto-generated method stub
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                        throws CertificateException {
+                    // TODO Auto-generated method stub
 
-				}
-			};
-			SSLContext ctx = SSLContext.getInstance("TLS");
-			ctx.init(null, new TrustManager[] { tm }, null);
-			SSLContext.setDefault(ctx);
-			HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-			// conn.setSSLSocketFactory(ctx.getSocketFactory());
-			conn.setHostnameVerifier(new HostnameVerifier() {
+                }
+            };
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            ctx.init(null, new TrustManager[]{tm}, null);
+            SSLContext.setDefault(ctx);
+            HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
+            // conn.setSSLSocketFactory(ctx.getSocketFactory());
+            conn.setHostnameVerifier(new HostnameVerifier() {
 
-				@Override
-				public boolean verify(String paramString, SSLSession paramSSLSession) {
-					return true;
-				}
-			});
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json");
-			if (auth == null || auth.trim().equals("")) {
+                @Override
+                public boolean verify(String paramString, SSLSession paramSSLSession) {
+                    return true;
+                }
+            });
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            if (auth == null || auth.trim().equals("")) {
 
-			} else {
-				conn.addRequestProperty("Authorization", auth);
-			}
+            } else {
+                conn.addRequestProperty("Authorization", auth);
+            }
 
-			conn.connect();
+            conn.connect();
 
-			OutputStream os = conn.getOutputStream();
-			try {
-				os.write(inputsent.getBytes());
-			} catch (IOException e) {
-				logger.error("***************: Loi:  " + e.getMessage());
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
-			}
+            OutputStream os = conn.getOutputStream();
+            try {
+                os.write(inputsent.getBytes());
+            } catch (IOException e) {
+                logger.error("***************: Loi:  " + e.getMessage());
+                // TODO Auto-generated catch block
+                // e.printStackTrace();
+            }
 
-			os.flush();
+            os.flush();
 
 //			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
 //				return "1";
 //			}
-			if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				TokenUtils.getAccessToken();
-			}
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                TokenUtils.getAccessToken();
+            }
 
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-			String output;
-			StringBuilder kq = new StringBuilder();
+            String output;
+            StringBuilder kq = new StringBuilder();
 
-			System.out.println("Output from Server .... \n");
-			while ((output = br.readLine()) != null) {
-				// System.out.println("Data output: "+output);
-				kq.append(output);
-			}
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                // System.out.println("Data output: "+output);
+                kq.append(output);
+            }
 
-			conn.disconnect();
-			return kq.toString();
-		} catch (Exception ex) {
-			logger.error("***************: Loi:  " + ex.getMessage());
-			System.out.println(ex.getMessage());
-			return "2";
-		}
-	}
+            conn.disconnect();
+            return kq.toString();
+        } catch (Exception ex) {
+            logger.error("***************: Loi:  " + ex.getMessage());
+            System.out.println(ex.getMessage());
+            return "2";
+        }
+    }
 
-	public static String connectServer(String urlstr, String inputsent, String auth) {
-		try {
-			logger.info(urlstr);
-			logger.info(auth);
-			logger.info(inputsent);
-			URL url = new URL(urlstr);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			
-			conn.setRequestProperty("accept", "text/plain");
-			conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-			if (auth == null || auth.trim().equals("")) {
+    public static String connectServer(String urlstr, String inputsent, String auth) {
+        try {
+            logger.info(urlstr);
+            logger.info(auth);
+            logger.info(inputsent);
+            URL url = new URL(urlstr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
 
-			} else {
-				logger.info("Auth:"+auth);
-				conn.addRequestProperty("Authorization", auth);
-			}
-			String input = inputsent;
+            conn.setRequestProperty("accept", "text/plain");
+            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            if (auth == null || auth.trim().equals("")) {
 
-			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
-			os.flush();
+            } else {
+                logger.info("Auth:" + auth);
+                conn.addRequestProperty("Authorization", auth);
+            }
+            String input = inputsent;
 
-			if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				logger.error("***************: Loi :   " + 401);
-				TokenUtils.getAccessToken();
-			}
+            OutputStream os = conn.getOutputStream();
+            os.write(input.getBytes());
+            os.flush();
 
-			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				System.out.println(conn.getResponseCode());
-				 return "3";
-			}
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                logger.error("***************: Loi :   " + 401);
+                TokenUtils.getAccessToken();
+            }
 
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println(conn.getResponseCode());
+                return "3";
+            }
 
-			String output;
-			String output2 = "";
-			System.out.println("Output from Server .... \n");
-			while ((output = br.readLine()) != null) {
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-				output2 += output;
+            String output;
+            String output2 = "";
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
 
-			}
+                output2 += output;
+
+            }
 
 //            // tesst
 //            System.out.println("output2: " + output2);
 
-			conn.disconnect();
-			return output2;
+            conn.disconnect();
+            return output2;
 
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			logger.error("***************: Loi :   " + e.getMessage());
-			return "2";
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("***************: Loi :   " + e.getMessage());
-			return "3";
-		}
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            logger.error("***************: Loi :   " + e.getMessage());
+            return "2";
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("***************: Loi :   " + e.getMessage());
+            return "3";
+        }
 
-	}
+    }
 }
