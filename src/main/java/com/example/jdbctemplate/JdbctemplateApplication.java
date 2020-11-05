@@ -68,12 +68,12 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	@Override
 	public void run(String... args) throws Exception {
-		myRunMethod();
+		//myRunMethod();
 
 	}
 
 	// Auto callback once every 5 minutes = 5 * 60 * 1000 millis
-	@Scheduled(fixedRate = 5000L)
+	@Scheduled(fixedRate = 30000L)
 	private void myRunMethod() {
 		logger.info("*************************************: Bat dau chay app");
 
@@ -247,7 +247,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //										new SimpleDateFormat("dd/MM/YYYY").parse(objectResult.getString("ngayky")),
 //										outNumLong
 //										
-										objectResult.getString("mauso"), 
+										objectResult.getString("mauso"),
 										objectResult.getString("kyhieu"),
 										objectResult.getString("sohoadon"),
 										new SimpleDateFormat("dd/MM/YYYY").parse(objectResult.getString("ngayky")),
