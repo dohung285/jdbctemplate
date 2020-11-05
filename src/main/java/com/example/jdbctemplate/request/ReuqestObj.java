@@ -10,215 +10,240 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-
 public class ReuqestObj {
 
-@JsonProperty("doanhnghiep_mst")
-private String doanhnghiep_mst;
+	@JsonProperty("doanhnghiep_mst")
+	private String doanhnghiep_mst;
 
-@JsonProperty("loaihoadon_ma")
-private String loaihoadon_ma;
+	@JsonProperty("loaihoadon_ma")
+	private String loaihoadon_ma;
 
-@JsonProperty("mauso")
-private String mauso;
+	@JsonProperty("mauso")
+	private String mauso;
 
-@JsonProperty("kyhieu")
-private String kyhieu;
+	@JsonProperty("kyhieu")
+	private String kyhieu;
 
-@JsonProperty("ma_hoadon")
-private String ma_hoadon;
+	@JsonProperty("ma_hoadon")
+	private String ma_hoadon;
 
-@JsonProperty("ngaylap")
-private String ngaylap;
+	@JsonProperty("ngaylap")
+	private String ngaylap;
 
-@JsonProperty("vanchuyen_so")
-private String vanchuyen_so;
+	@JsonProperty("vanchuyen_so")
+	private String vanchuyen_so;
 
-@JsonProperty("vanchuyen_ngayxuat")
-private String vanchuyen_ngayxuat;
+	@JsonProperty("vanchuyen_ngayxuat")
+	private String vanchuyen_ngayxuat;
 
-@JsonProperty("vanchuyen_khoxuat")
-private String vanchuyen_khoxuat;
+	@JsonProperty("vanchuyen_khoxuat")
+	private String vanchuyen_khoxuat;
 
-@JsonProperty("vanchuyen_khonhap")
-private String vanchuyen_khonhap;
+	@JsonProperty("vanchuyen_khonhap")
+	private String vanchuyen_khonhap;
 
-@JsonProperty("tongtien_chuavat")
-private Integer tongtien_chuavat;
+	@JsonProperty("tongtien_chuavat")
+	private Integer tongtien_chuavat;
 
 //vanchuyen_giaohang
-@JsonProperty("vanchuyen_giaohang")
-private String vanchuyen_giaohang;
+	@JsonProperty("vanchuyen_giaohang")
+	private String vanchuyen_giaohang;
 
-@JsonProperty("tienthue")
-private Integer tienthue;
+	@JsonProperty("vanchuyen_phuongthuc")
+	private String vanchuyen_phuongthuc;
 
-@JsonProperty("tongtien_covat")
-private Integer tongtien_covat;
+	@JsonProperty("vanchuyen_lydo")
+	private String vanchuyen_lydo;
 
-@JsonProperty("dschitiet")
-private List<Dschitiet> dschitiet = null;
-@JsonIgnore
-private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+	@JsonProperty("tienthue")
+	private Integer tienthue;
 
+	@JsonProperty("tongtien_covat")
+	private Integer tongtien_covat;
 
-@JsonProperty("vanchuyen_giaohang")
-public String getVanchuyen_giaohang() {
-	return vanchuyen_giaohang;
-}
-@JsonProperty("vanchuyen_giaohang")
-public void setVanchuyen_giaohang(String vanchuyen_giaohang) {
-	this.vanchuyen_giaohang = vanchuyen_giaohang;
-}
+	@JsonProperty("dschitiet")
+	private List<Dschitiet> dschitiet = null;
+	@JsonIgnore
+	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-@JsonProperty("doanhnghiep_mst")
-public String getDoanhnghiepMst() {
-return doanhnghiep_mst;
-}
+	@JsonProperty("vanchuyen_giaohang")
+	public String getVanchuyen_giaohang() {
+		return vanchuyen_giaohang;
+	}
 
-@JsonProperty("doanhnghiep_mst")
-public void setDoanhnghiepMst(String doanhnghiepMst) {
-this.doanhnghiep_mst = doanhnghiepMst;
-}
+	@JsonProperty("vanchuyen_giaohang")
+	public void setVanchuyen_giaohang(String vanchuyen_giaohang) {
+		this.vanchuyen_giaohang = vanchuyen_giaohang;
+	}
 
-@JsonProperty("loaihoadon_ma")
-public String getLoaihoadonMa() {
-return loaihoadon_ma;
-}
+	@JsonProperty("vanchuyen_phuongthuc")
+	public String getVanchuyen_phuongthuc() {
+		return vanchuyen_phuongthuc;
+	}
 
-@JsonProperty("loaihoadon_ma")
-public void setLoaihoadonMa(String loaihoadonMa) {
-this.loaihoadon_ma = loaihoadonMa;
-}
+	@JsonProperty("vanchuyen_phuongthuc") // vanchuyen_lydo
+	public void setVanchuyen_phuongthuc(String vanchuyen_phuongthuc) {
+		this.vanchuyen_phuongthuc = vanchuyen_phuongthuc;
+	}
+	
+	@JsonProperty("vanchuyen_lydo") // vanchuyen_lydo
+	public String getVanchuyen_lydo() {
+		return vanchuyen_lydo;
+	}
+	
+	@JsonProperty("vanchuyen_lydo") // vanchuyen_lydo
+	public void setVanchuyen_lydo(String vanchuyen_lydo) {
+		this.vanchuyen_lydo = vanchuyen_lydo;
+	}
 
-@JsonProperty("mauso")
-public String getMauso() {
-return mauso;
-}
+	@JsonProperty("doanhnghiep_mst")
+	public String getDoanhnghiepMst() {
+		return doanhnghiep_mst;
+	}
 
-@JsonProperty("mauso")
-public void setMauso(String mauso) {
-this.mauso = mauso;
-}
+	@JsonProperty("doanhnghiep_mst")
+	public void setDoanhnghiepMst(String doanhnghiepMst) {
+		this.doanhnghiep_mst = doanhnghiepMst;
+	}
 
-@JsonProperty("kyhieu")
-public String getKyhieu() {
-return kyhieu;
-}
+	@JsonProperty("loaihoadon_ma")
+	public String getLoaihoadonMa() {
+		return loaihoadon_ma;
+	}
 
-@JsonProperty("kyhieu")
-public void setKyhieu(String kyhieu) {
-this.kyhieu = kyhieu;
-}
+	@JsonProperty("loaihoadon_ma")
+	public void setLoaihoadonMa(String loaihoadonMa) {
+		this.loaihoadon_ma = loaihoadonMa;
+	}
 
-@JsonProperty("ma_hoadon")
-public String getMaHoadon() {
-return ma_hoadon;
-}
+	@JsonProperty("mauso")
+	public String getMauso() {
+		return mauso;
+	}
 
-@JsonProperty("ma_hoadon")
-public void setMaHoadon(String maHoadon) {
-this.ma_hoadon = maHoadon;
-}
+	@JsonProperty("mauso")
+	public void setMauso(String mauso) {
+		this.mauso = mauso;
+	}
 
-@JsonProperty("ngaylap")
-public String getNgaylap() {
-return ngaylap;
-}
+	@JsonProperty("kyhieu")
+	public String getKyhieu() {
+		return kyhieu;
+	}
 
-@JsonProperty("ngaylap")
-public void setNgaylap(String ngaylap) {
-this.ngaylap = ngaylap;
-}
+	@JsonProperty("kyhieu")
+	public void setKyhieu(String kyhieu) {
+		this.kyhieu = kyhieu;
+	}
 
-@JsonProperty("vanchuyen_so")
-public String getVanchuyenSo() {
-return vanchuyen_so;
-}
+	@JsonProperty("ma_hoadon")
+	public String getMaHoadon() {
+		return ma_hoadon;
+	}
 
-@JsonProperty("vanchuyen_so")
-public void setVanchuyenSo(String vanchuyenSo) {
-this.vanchuyen_so = vanchuyenSo;
-}
+	@JsonProperty("ma_hoadon")
+	public void setMaHoadon(String maHoadon) {
+		this.ma_hoadon = maHoadon;
+	}
 
-@JsonProperty("vanchuyen_ngayxuat")
-public String getVanchuyenNgayxuat() {
-return vanchuyen_ngayxuat;
-}
+	@JsonProperty("ngaylap")
+	public String getNgaylap() {
+		return ngaylap;
+	}
 
-@JsonProperty("vanchuyen_ngayxuat")
-public void setVanchuyenNgayxuat(String vanchuyenNgayxuat) {
-this.vanchuyen_ngayxuat = vanchuyenNgayxuat;
-}
+	@JsonProperty("ngaylap")
+	public void setNgaylap(String ngaylap) {
+		this.ngaylap = ngaylap;
+	}
 
-@JsonProperty("vanchuyen_khoxuat")
-public String getVanchuyenKhoxuat() {
-return vanchuyen_khoxuat;
-}
+	@JsonProperty("vanchuyen_so")
+	public String getVanchuyenSo() {
+		return vanchuyen_so;
+	}
 
-@JsonProperty("vanchuyen_khoxuat")
-public void setVanchuyenKhoxuat(String vanchuyenKhoxuat) {
-this.vanchuyen_khoxuat = vanchuyenKhoxuat;
-}
+	@JsonProperty("vanchuyen_so")
+	public void setVanchuyenSo(String vanchuyenSo) {
+		this.vanchuyen_so = vanchuyenSo;
+	}
 
-@JsonProperty("vanchuyen_khonhap")
-public String getVanchuyenKhonhap() {
-return vanchuyen_khonhap;
-}
+	@JsonProperty("vanchuyen_ngayxuat")
+	public String getVanchuyenNgayxuat() {
+		return vanchuyen_ngayxuat;
+	}
 
-@JsonProperty("vanchuyen_khonhap")
-public void setVanchuyenKhonhap(String vanchuyenKhonhap) {
-this.vanchuyen_khonhap = vanchuyenKhonhap;
-}
+	@JsonProperty("vanchuyen_ngayxuat")
+	public void setVanchuyenNgayxuat(String vanchuyenNgayxuat) {
+		this.vanchuyen_ngayxuat = vanchuyenNgayxuat;
+	}
 
-@JsonProperty("tongtien_chuavat")
-public Integer getTongtienChuavat() {
-return tongtien_chuavat;
-}
+	@JsonProperty("vanchuyen_khoxuat")
+	public String getVanchuyenKhoxuat() {
+		return vanchuyen_khoxuat;
+	}
 
-@JsonProperty("tongtien_chuavat")
-public void setTongtienChuavat(Integer tongtienChuavat) {
-this.tongtien_chuavat = tongtienChuavat;
-}
+	@JsonProperty("vanchuyen_khoxuat")
+	public void setVanchuyenKhoxuat(String vanchuyenKhoxuat) {
+		this.vanchuyen_khoxuat = vanchuyenKhoxuat;
+	}
 
-@JsonProperty("tienthue")
-public Integer getTienthue() {
-return tienthue;
-}
+	@JsonProperty("vanchuyen_khonhap")
+	public String getVanchuyenKhonhap() {
+		return vanchuyen_khonhap;
+	}
 
-@JsonProperty("tienthue")
-public void setTienthue(Integer tienthue) {
-this.tienthue = tienthue;
-}
+	@JsonProperty("vanchuyen_khonhap")
+	public void setVanchuyenKhonhap(String vanchuyenKhonhap) {
+		this.vanchuyen_khonhap = vanchuyenKhonhap;
+	}
 
-@JsonProperty("tongtien_covat")
-public Integer getTongtienCovat() {
-return tongtien_covat;
-}
+	@JsonProperty("tongtien_chuavat")
+	public Integer getTongtienChuavat() {
+		return tongtien_chuavat;
+	}
 
-@JsonProperty("tongtien_covat")
-public void setTongtienCovat(Integer tongtienCovat) {
-this.tongtien_covat = tongtienCovat;
-}
+	@JsonProperty("tongtien_chuavat")
+	public void setTongtienChuavat(Integer tongtienChuavat) {
+		this.tongtien_chuavat = tongtienChuavat;
+	}
 
-@JsonProperty("dschitiet")
-public List<Dschitiet> getDschitiet() {
-return dschitiet;
-}
+	@JsonProperty("tienthue")
+	public Integer getTienthue() {
+		return tienthue;
+	}
 
-@JsonProperty("dschitiet")
-public void setDschitiet(List<Dschitiet> dschitiet) {
-this.dschitiet = dschitiet;
-}
+	@JsonProperty("tienthue")
+	public void setTienthue(Integer tienthue) {
+		this.tienthue = tienthue;
+	}
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+	@JsonProperty("tongtien_covat")
+	public Integer getTongtienCovat() {
+		return tongtien_covat;
+	}
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+	@JsonProperty("tongtien_covat")
+	public void setTongtienCovat(Integer tongtienCovat) {
+		this.tongtien_covat = tongtienCovat;
+	}
+
+	@JsonProperty("dschitiet")
+	public List<Dschitiet> getDschitiet() {
+		return dschitiet;
+	}
+
+	@JsonProperty("dschitiet")
+	public void setDschitiet(List<Dschitiet> dschitiet) {
+		this.dschitiet = dschitiet;
+	}
+
+	@JsonAnyGetter
+	public Map<String, Object> getAdditionalProperties() {
+		return this.additionalProperties;
+	}
+
+	@JsonAnySetter
+	public void setAdditionalProperty(String name, Object value) {
+		this.additionalProperties.put(name, value);
+	}
 
 }

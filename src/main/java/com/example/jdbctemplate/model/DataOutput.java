@@ -12,6 +12,7 @@ public class DataOutput {
 	private Integer qty;
 	private String remar;
 	private String numberContract;
+	private String numberCar;
 	private String accFlag;
 	private String printFlag;
 	private Integer sum;
@@ -19,8 +20,14 @@ public class DataOutput {
 	public DataOutput() {
 		super();
 	}
-	
-	
+
+	public String getNumberCar() {
+		return numberCar;
+	}
+
+	public void setNumberCar(String numberCar) {
+		this.numberCar = numberCar;
+	}
 
 	public String getDat() {
 		return dat;
@@ -116,7 +123,5 @@ public class DataOutput {
 				+ ", uom=" + uom + ", qty=" + qty + ", remar=" + remar + ", numberContract=" + numberContract
 				+ ", accFlag=" + accFlag + ", printFlag=" + printFlag + ", sum=" + sum + "]";
 	}
-
-	
 
 }

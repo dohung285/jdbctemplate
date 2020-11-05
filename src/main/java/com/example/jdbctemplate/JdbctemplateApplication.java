@@ -132,6 +132,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 			} // end else
 
+			if (listSource.size() == 0) {
+				logger.info(
+						"***************: listSource == null. Khong co du lieu thoa man 4 dieu kien! (ACC_MODEL,ACC_SYMBOL,ACC_NUMBER,ACC_DATE) == NULL");
+			}
+
 			// List luu OutNum distinct
 			List<BigDecimal> listout = new ArrayList<BigDecimal>();
 			BigDecimal outindex = new BigDecimal(0);
@@ -141,6 +146,9 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				}
 				outindex = item.getOutNum();
 			}
+			// Sort
+//			List<BigDecimal> listoutSort = listout.stream().sorted().collect(Collectors.toList());
+
 			int indexListOutNum = 0;
 			for (BigDecimal itemoutnum : listout) {
 				BigDecimal outNum = new BigDecimal(0);
@@ -191,11 +199,27 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 					logger.info("***************: ForCompany = NULL tai OUT_NUM := " + outNum);
 				} else {
 
+//					bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
+//					bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
+//					bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
+//					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
+//					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+//
+//					bodyRequest.setTongtienChuavat(0);
+//					bodyRequest.setTienthue(0);
+//					bodyRequest.setTongtienCovat(0);
+
 					bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
-					bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
 					bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
-					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
+
+					// bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
+//					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
+//					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+					bodyRequest.setVanchuyen_lydo(itemlistofoutnum.get(0).getReason());
+					bodyRequest.setVanchuyen_phuongthuc(itemlistofoutnum.get(0).getNumberCar());
+					bodyRequest.setVanchuyenKhoxuat("Công ty TNHH Việt Nam SAMHO");
 					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+					bodyRequest.setVanchuyenSo(itemlistofoutnum.get(0).getNumberContract());
 
 					bodyRequest.setTongtienChuavat(0);
 					bodyRequest.setTienthue(0);
