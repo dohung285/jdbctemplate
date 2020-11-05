@@ -68,12 +68,13 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	@Override
 	public void run(String... args) throws Exception {
-		//myRunMethod();
+		// myRunMethod();
 
 	}
 
 	// Auto callback once every 5 minutes = 5 * 60 * 1000 millis
 	@Scheduled(fixedRate = 30000L)
+//	@Scheduled(fixedRate = 5000L)
 	private void myRunMethod() {
 		logger.info("*************************************: Bat dau chay app");
 
@@ -88,25 +89,47 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				long maxOutNum = dataOutputRepository.getMaxSequence();
 				FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
 				// CALL API DE LAY DU LIEU
-				logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). ");
+				logger.info(
+						"***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "
+								+ maxOutNum);
 				listSource = dataOutputRepository.getData(maxOutNum, 0L);
 
 			} else {
 				logger.info("***************: File maxOutNum.txt da ton tai. ");
-				// String strMaxOutNum = FileUtils.readFile(file);
-				String strMaxOutNum = org.apache.commons.io.FileUtils.readFileToString(file);
-				long maxOldOutNum = 0;
-				try {
-					maxOldOutNum = Long.parseLong(strMaxOutNum);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				long maxNewOutNum = dataOutputRepository.getMaxSequence();
-				logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
+				String strMaxOutNum = FileUtils.readFile(file);
+				// String strMaxOutNum = org.apache.commons.io.FileUtils.readFileToString(file);
+				if (strMaxOutNum == null) {
+					long maxOutNum = dataOutputRepository.getMaxSequence();
+					FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
+					String strMaxOutNumRecall = FileUtils.readFile(file);
+					long maxOldOutNum = 0;
+					try {
+						maxOldOutNum = Long.parseLong(strMaxOutNumRecall);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					long maxNewOutNum = dataOutputRepository.getMaxSequence();
+					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
 
-				// Call API - BILL - lay dc listSource
-				logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
-				listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
+					// Call API - BILL - lay dc listSource
+					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
+					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
+				} else {
+
+					long maxOldOutNum = 0;
+					try {
+						maxOldOutNum = Long.parseLong(strMaxOutNum);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					long maxNewOutNum = dataOutputRepository.getMaxSequence();
+					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
+
+					// Call API - BILL - lay dc listSource
+					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
+					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
+				}
+
 			} // end else
 
 			// List luu OutNum distinct
@@ -247,10 +270,9 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //										new SimpleDateFormat("dd/MM/YYYY").parse(objectResult.getString("ngayky")),
 //										outNumLong
 //										
-										objectResult.getString("mauso"),
-										objectResult.getString("kyhieu"),
+										objectResult.getString("mauso"), objectResult.getString("kyhieu"),
 										objectResult.getString("sohoadon"),
-										new SimpleDateFormat("dd/MM/YYYY").parse(objectResult.getString("ngayky")),
+										new SimpleDateFormat("dd/MM/yyyy").parse(objectResult.getString("ngayky")),
 										outNumLong
 
 								);
