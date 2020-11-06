@@ -50,7 +50,7 @@ public class TokenUtils {
 		// Luu token vào file
 		//FileUtils.writeFile(file, false, objectResult.getString("access_token"));
 		FileUtils.tokenWS = objectResult.getString("access_token");
-		logger.info("***************: Luu access_token vao file thanh cong ");
+		logger.info("***************: Luu access_token vao bien static thanh cong ");
 
 	}
 

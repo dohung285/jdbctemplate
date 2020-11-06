@@ -32,6 +32,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cyber.utils.FileUtils;
+import com.cyber.utils.TokenUtils;
 import com.cyber.utils.Utils;
 import com.example.jdbctemplate.model.DataOutput;
 import com.example.jdbctemplate.repository.DataOutputRepository;
@@ -77,6 +78,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //	@Scheduled(fixedRate = 5000L)
 	private void myRunMethod() {
 		logger.info("*************************************: Bat dau chay app");
+
+		if (FileUtils.tokenWS == null || FileUtils.tokenWS.isEmpty()) {
+			logger.info("***************: Lan dau chay => getToken   ");
+			TokenUtils.getAccessToken();
+		}
 
 		// lan dau tien chay ghi gia tri ra file
 		File file = new File(FILENAME);
@@ -257,16 +263,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //						logger.info("***************: File token.txt chua ton tai");
 //						fileToken.createNewFile();
 //					}
+
 					String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
 							" Bearer " + FileUtils.tokenWS);
-
 					logger.info("***************: Ket qua CALL API- BILL :  " + result);
-//					byte[] bytes = result.getBytes(StandardCharsets.UTF_8);
-//					String utf8EncodedString = new String(bytes, StandardCharsets.UTF_8);
-//					logger.info("***************: Ket qua CALL API- BILL :  " + utf8EncodedString);
-
 					if (!result.equals("3")) {
-
 						JSONObject json = new JSONObject(result);
 						JSONObject objectResult = new JSONObject();
 						objectResult = json.getJSONObject("result");
