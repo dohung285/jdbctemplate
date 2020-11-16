@@ -179,15 +179,16 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				bodyRequest.setMauso("03XKNB0/001");
 				bodyRequest.setKyhieu("AA/20E");
 
-				// bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
+				bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
 
-				File fileMHD = new File(FILEmaHD);
-				long maHD = Long.parseLong(FileUtils.readFile(fileMHD)) + 1;
-				bodyRequest.setMaHoadon(maHD + ""); // doc tu file
 				// ghi lai vao file gia tri vua su dung
 				// FileUtils.writeFile(fileMHD, false,
 				// String.valueOf(listout.get(indexListOutNum)));
-				FileUtils.writeFile(fileMHD, false, String.valueOf(maHD));
+
+//				File fileMHD = new File(FILEmaHD);
+//				long maHD = Long.parseLong(FileUtils.readFile(fileMHD)) + 1;
+//				bodyRequest.setMaHoadon(maHD + ""); // doc tu file
+//				FileUtils.writeFile(fileMHD, false, String.valueOf(maHD));
 
 				if (Objects.isNull(itemlistofoutnum.get(0).getDat()) || itemlistofoutnum.get(0).getDat().isEmpty()) {
 					logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
@@ -232,6 +233,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 					bodyRequest.setTongtienCovat(0);
 
 					List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
+					int indexOfDetail=1;
 					for (DataOutput itemfilter : itemlistofoutnum) {
 
 						Dschitiet ct = new Dschitiet();
@@ -244,6 +246,8 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 							return;
 
 						} else {
+							//set stt cho detail
+							ct.setStt(indexOfDetail++);
 							ct.setTen(itemfilter.getRemar());
 							ct.setDonvitinh(itemfilter.getUom());
 							ct.setSoluong(itemfilter.getQty());
@@ -253,6 +257,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						lChitiet.add(ct);
 
 					}
+					indexOfDetail=1;
 					bodyRequest.setDschitiet(lChitiet);
 
 					String jsonbody = new Gson().toJson(bodyRequest);

@@ -10,10 +10,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Dschitiet {
 
+	@JsonProperty("stt")
+	private int stt;
+
 	@JsonProperty("ten")
 	private String ten;
+
 	@JsonProperty("donvitinh")
 	private String donvitinh;
+
 	@JsonProperty("soluong")
 	private Integer soluong;
 
@@ -22,6 +27,15 @@ public class Dschitiet {
 
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+	@JsonProperty("stt")
+	public int getStt() {
+		return stt;
+	}
+	@JsonProperty("stt")
+	public void setStt(int stt) {
+		this.stt = stt;
+	}
 
 	@JsonProperty("vanchuyen_loai")
 	public Integer getVanchuyen_loai() {
