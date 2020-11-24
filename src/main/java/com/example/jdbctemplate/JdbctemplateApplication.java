@@ -70,11 +70,17 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 	@Override
 	public void run(String... args) throws Exception {
 		// myRunMethod();
+		System.out.println("doanhNghiepMST la: "+env.getProperty("doanhnghiepMst"));
+    	System.out.println("loaihoadonMa la: "+env.getProperty("loaihoadonMa"));
+    	System.out.println("mauso la: "+env.getProperty("mauso"));
+    	System.out.println("kyhieu la: "+env.getProperty("kyhieu"));
+    	System.out.println("timeCallback la: "+env.getProperty("timeCallback"));
+    	System.out.println("API gửi la: "+env.getProperty("urlGuiVaKyHoadonGocHSM"));
 
 	}
 
 	// Auto callback once every 5 minutes = 5 * 60 * 1000 millis
-	@Scheduled(fixedRate = 30000L)
+	//@Scheduled(fixedRate = 30000L)
 //	@Scheduled(fixedRate = 5000L)
 	private void myRunMethod() {
 		logger.info("*************************************: Bat dau chay app");
