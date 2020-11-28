@@ -108,7 +108,66 @@ và thêm 4 điều kiện null nữa do ở db test ko có dữ liệu đó
 
 
 
-
+SELECT
+    a.dat,
+    a.out_num,
+    'CONG TY TNHH VIEÄT NAM SAMHO' AS xuat_kho,
+    a.reason,
+    a.for_company,
+    a.number_car,
+    a.number_contract,
+    b.remar,
+    b.uom,
+    a.acc_flag,
+    a.print_flag,
+    SUM(b.qty) AS qty
+FROM
+    mes.tb_out_header     a,
+    mes.tb_out_n_detail   b
+WHERE
+    a.out_num = b.out_num
+    AND a.acc_flag = 'Y'
+    AND a.print_flag = 'Y'
+    AND a.acc_model IS NULL
+    AND a.acc_symbol IS NULL
+    AND a.acc_number IS NULL
+    AND a.acc_date IS NULL
+    AND a.out_num <= ?
+GROUP BY
+    a.dat,
+    a.out_num,
+    a.reason,
+    a.for_company,
+    a.number_car,
+    a.number_contract,
+    b.remar,
+    b.uom,
+    a.acc_flag,
+    a.print_flag
+    
+    
+    9042
+10218
+10352
+10333
+10234
+10234
+10268
+10352
+10349
+10288
+10234
+9042
+10288
+10209
+10218
+10349
+10349
+10333
+10234
+10349
+10234
+    
 
 
 

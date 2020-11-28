@@ -127,7 +127,9 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				long maxOutNum = dataOutputRepository.getMaxSequence();
 				FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
 				// CALL API DE LAY DU LIEU
-				logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "+ maxOutNum);
+				logger.info(
+						"***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "
+								+ maxOutNum);
 				listSource = dataOutputRepository.getData(maxOutNum, 0L);
 
 			} else {
@@ -165,13 +167,14 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
 //					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
 //				}
-				
+
 				long maxOutNum = dataOutputRepository.getMaxSequence();
 				FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
 				// CALL API DE LAY DU LIEU
-				logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "+ maxOutNum);
+				logger.info(
+						"***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "
+								+ maxOutNum);
 				listSource = dataOutputRepository.getData(maxOutNum, 0L);
-				
 
 			} // end else
 
@@ -190,8 +193,6 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				}
 				outindex = item.getOutNum();
 			}
-			// Sort
-//			List<BigDecimal> listoutSort = listout.stream().sorted().collect(Collectors.toList());
 
 			int indexListOutNum = 0;
 			for (BigDecimal itemoutnum : listout) {
@@ -202,197 +203,148 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						.filter(c -> c.getOutNum().compareTo(itemoutnum) == 0).collect(Collectors.toList());
 				ReuqestObj bodyRequest = new ReuqestObj();
 
-//				bodyRequest.setDoanhnghiepMst("0303030303");
-//				bodyRequest.setLoaihoadonMa("03XKNB");
-//				bodyRequest.setMauso("03XKNB0/001");
-//				bodyRequest.setKyhieu("QQ/20E");
-
-//                bodyRequest.setDoanhnghiepMst("0300812669");
-//                bodyRequest.setLoaihoadonMa("03XKNB");
-//                bodyRequest.setMauso("03XKNB/001");
-//                bodyRequest.setKyhieu("AA/20E");
-
-//				bodyRequest.setDoanhnghiepMst("0300812669");
-//				bodyRequest.setLoaihoadonMa("03XKNB");
-//				bodyRequest.setMauso("03XKNB0/001");
-//				bodyRequest.setKyhieu("AA/20E");
 				if (env.getProperty("doanhnghiepMst") == null || env.getProperty("doanhnghiepMst").isEmpty()) {
 					logger.info(
 							"***************: Khong lay duoc thong tin trong file application.properties :  doanhnghiepMst");
-					return;
+
 				}
 				if (env.getProperty("loaihoadonMa") == null || env.getProperty("loaihoadonMa").isEmpty()) {
 					logger.info(
 							"***************: Khong lay duoc thong tin trong file application.properties :  loaihoadonMa");
-					return;
+
 				}
 				if (env.getProperty("mauso") == null || env.getProperty("mauso").isEmpty()) {
 					logger.info("***************: Khong lay duoc thong tin trong file application.properties :  mauso");
-					return;
+
 				}
 				if (env.getProperty("kyhieu") == null || env.getProperty("kyhieu").isEmpty()) {
 					logger.info(
 							"***************: Khong lay duoc thong tin trong file application.properties :  kyhieu");
-					return;
-				}
 
-				bodyRequest.setDoanhnghiepMst(env.getProperty("doanhnghiepMst"));
-				bodyRequest.setLoaihoadonMa(env.getProperty("loaihoadonMa"));
-				bodyRequest.setMauso(env.getProperty("mauso"));
-				bodyRequest.setKyhieu(env.getProperty("kyhieu"));
-
-				bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
-
-				// ghi lai vao file gia tri vua su dung
-				// FileUtils.writeFile(fileMHD, false,
-				// String.valueOf(listout.get(indexListOutNum)));
-
-//				File fileMHD = new File(FILEmaHD);
-//				long maHD = Long.parseLong(FileUtils.readFile(fileMHD)) + 1;
-//				bodyRequest.setMaHoadon(maHD + ""); // doc tu file
-//				FileUtils.writeFile(fileMHD, false, String.valueOf(maHD));
-
-				if (Objects.isNull(itemlistofoutnum.get(0).getDat()) || itemlistofoutnum.get(0).getDat().isEmpty()) {
-					logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
-				} else if (Objects.isNull(itemlistofoutnum.get(0).getNumberContract())
-						|| itemlistofoutnum.get(0).getNumberContract().isEmpty()) {
-					logger.info("***************: NUMBER_CONTRACT = NULL tai OUT_NUM := " + outNum);
-				} else if (Objects.isNull(itemlistofoutnum.get(0).getDat())
-						|| itemlistofoutnum.get(0).getDat().isEmpty()) {
-					logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
-				} else if (Objects.isNull(itemlistofoutnum.get(0).getReason())
-						|| itemlistofoutnum.get(0).getReason().isEmpty()) {
-					logger.info("***************: RESON = NULL tai OUT_NUM := " + outNum);
-				} else if (Objects.isNull(itemlistofoutnum.get(0).getForCompany())
-						|| itemlistofoutnum.get(0).getForCompany().isEmpty()) {
-					logger.info("***************: ForCompany = NULL tai OUT_NUM := " + outNum);
 				} else {
+					bodyRequest.setDoanhnghiepMst(env.getProperty("doanhnghiepMst"));
+					bodyRequest.setLoaihoadonMa(env.getProperty("loaihoadonMa"));
+					bodyRequest.setMauso(env.getProperty("mauso"));
+					bodyRequest.setKyhieu(env.getProperty("kyhieu"));
 
-//					bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
-//					bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
-//					bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
-//					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
-//					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
-//
-//					bodyRequest.setTongtienChuavat(0);
-//					bodyRequest.setTienthue(0);
-//					bodyRequest.setTongtienCovat(0);
+					bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
 
-					bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
-					bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
+					if (Objects.isNull(itemlistofoutnum.get(0).getDat())
+							|| itemlistofoutnum.get(0).getDat().isEmpty()) {
+						logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
+					} else if (Objects.isNull(itemlistofoutnum.get(0).getNumberContract())
+							|| itemlistofoutnum.get(0).getNumberContract().isEmpty()) {
+						logger.info("***************: NUMBER_CONTRACT = NULL tai OUT_NUM := " + outNum);
+					} else if (Objects.isNull(itemlistofoutnum.get(0).getDat())
+							|| itemlistofoutnum.get(0).getDat().isEmpty()) {
+						logger.info("***************: DATA = NULL tai OUT_NUM := " + outNum);
+					} else if (Objects.isNull(itemlistofoutnum.get(0).getReason())
+							|| itemlistofoutnum.get(0).getReason().isEmpty()) {
+						logger.info("***************: RESON = NULL tai OUT_NUM := " + outNum);
+					} else if (Objects.isNull(itemlistofoutnum.get(0).getForCompany())
+							|| itemlistofoutnum.get(0).getForCompany().isEmpty()) {
+						logger.info("***************: ForCompany = NULL tai OUT_NUM := " + outNum);
+					} else {
 
-					// bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
-//					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
-//					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+						bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
+						bodyRequest.setVanchuyenNgayxuat(
+								convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
 
-					bodyRequest.setVanchuyen_lydo(itemlistofoutnum.get(0).getReason());
-					bodyRequest.setVanchuyen_phuongthuc(itemlistofoutnum.get(0).getNumberCar());
-					bodyRequest.setVanchuyenKhoxuat("Công ty TNHH Việt Nam SAMHO");
-					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
-					bodyRequest.setVanchuyenSo(itemlistofoutnum.get(0).getNumberContract());
+						bodyRequest.setVanchuyen_lydo(itemlistofoutnum.get(0).getReason());
+						bodyRequest.setVanchuyen_phuongthuc(itemlistofoutnum.get(0).getNumberCar());
+						bodyRequest.setVanchuyenKhoxuat("Công ty TNHH Việt Nam SAMHO");
+						bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+						bodyRequest.setVanchuyenSo(itemlistofoutnum.get(0).getNumberContract());
 
-					bodyRequest.setTongtienChuavat(0);
-					bodyRequest.setTienthue(0);
-					bodyRequest.setTongtienCovat(0);
+						bodyRequest.setTongtienChuavat(0);
+						bodyRequest.setTienthue(0);
+						bodyRequest.setTongtienCovat(0);
 
-					List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
-					int indexOfDetail = 1;
-					for (DataOutput itemfilter : itemlistofoutnum) {
+						List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
+						int indexOfDetail = 1;
+						for (DataOutput itemfilter : itemlistofoutnum) {
 
-						Dschitiet ct = new Dschitiet();
-						if (Objects.isNull(itemfilter.getRemar()) || Objects.isNull(itemfilter.getUom())
-								|| Objects.isNull(itemfilter.getQty()) || itemfilter.getRemar().isEmpty()
-								|| itemfilter.getUom().isEmpty()
+							Dschitiet ct = new Dschitiet();
+							if (Objects.isNull(itemfilter.getRemar()) || Objects.isNull(itemfilter.getUom())
+									|| Objects.isNull(itemfilter.getQty()) || itemfilter.getRemar().isEmpty()
+									|| itemfilter.getUom().isEmpty()
 
-						) {
-							logger.info("***************:NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
-							return;
+							) {
+								logger.info("***************:NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
+								return;
 
-						} else {
-							// set stt cho detail
-							ct.setStt(indexOfDetail++);
-							ct.setTen(itemfilter.getRemar());
-							ct.setDonvitinh(itemfilter.getUom());
-							ct.setSoluong(itemfilter.getQty());
-							ct.setVanchuyen_loai(1);
-						}
-
-						lChitiet.add(ct);
-
-					}
-					indexOfDetail = 1;
-					bodyRequest.setDschitiet(lChitiet);
-
-					String jsonbody = new Gson().toJson(bodyRequest);
-					logger.info("***************: Thong tin gui di la:   " + jsonbody);
-//							+ DatatypeConverter.printBase64Binary(jsonbody.getBytes()));
-//					File fileToken = new File(FILEtoken);
-//					if (!fileToken.exists()) {
-//						logger.info("***************: File token.txt chua ton tai");
-//						fileToken.createNewFile();
-//					}
-
-					String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
-							" Bearer " + FileUtils.tokenWS, env.getProperty("urlGetToken"));
-					logger.info("***************: Ket qua CALL API- BILL :  " + result);
-					if (!result.equals("3")) {
-						JSONObject json = new JSONObject(result);
-						JSONObject objectResult = new JSONObject();
-						objectResult = json.getJSONObject("result");
-
-						if (objectResult.get("mauso").equals(null)) {
-							logger.error(
-									"***************: NULL mauso ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-						} else if (objectResult.get("kyhieu").equals(null)) {
-							logger.error(
-									"***************: NULL kyhieu ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-						} else if (objectResult.get("sohoadon").equals(null)) {
-							logger.error(
-									"***************: NULL sohoadon ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-						} else if (objectResult.get("ngayky").equals(null)) {
-							logger.error(
-									"***************: NULL ngayky ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-						} else {
-
-							long outNumLong = outNum.longValue();
-							try {
-								int x = dataOutputRepository.update4Filed(
-//										DatatypeConverter.printBase64Binary(objectResult.getString("mauso").getBytes()),
-//										DatatypeConverter.printBase64Binary(objectResult.getString("kyhieu").getBytes()),
-//										objectResult.getString("sohoadon"),
-//										new SimpleDateFormat("dd/MM/YYYY").parse(objectResult.getString("ngayky")),
-//										outNumLong
-//										
-										objectResult.getString("mauso"), objectResult.getString("kyhieu"),
-										objectResult.getString("sohoadon"),
-										new SimpleDateFormat("dd/MM/yyyy").parse(objectResult.getString("ngayky")),
-										outNumLong
-
-								);
-								if (x > 0) {
-									logger.info(
-											"***************: Ket qua UPDATE 4 truong la:   " + x + " Thanh cong UPDATE!!");
-								} else {
-									logger.error("***************: Ket qua UPDATE 4 truong la:   " + x + " That bai!!");
-								}
-
-							} catch (JSONException e) {
-								logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass()
-										+ "line: 170 ");
-							} catch (ParseException e) {
-								logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass()
-										+ "line: 173 ");
+							} else {
+								// set stt cho detail
+								ct.setStt(indexOfDetail++);
+								ct.setTen(itemfilter.getRemar());
+								ct.setDonvitinh(itemfilter.getUom());
+								ct.setSoluong(itemfilter.getQty());
+								ct.setVanchuyen_loai(1);
 							}
-							logger.info("***************: Ket thuc :***********************");
-							// Tang chi so cua indexOutNum len de ki lan tiep theo
-							indexListOutNum++;
-						}
 
-					} // end if
+							lChitiet.add(ct);
+
+						}
+						indexOfDetail = 1;
+						bodyRequest.setDschitiet(lChitiet);
+
+						String jsonbody = new Gson().toJson(bodyRequest);
+						logger.info("***************: Thong tin gui di la:   " + jsonbody);
+
+						String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
+								" Bearer " + FileUtils.tokenWS, env.getProperty("urlGetToken"));
+						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  "+outNum+" ------  " + result);
+						if (!result.equals("3")) {
+							JSONObject json = new JSONObject(result);
+							JSONObject objectResult = new JSONObject();
+							objectResult = json.getJSONObject("result");
+
+							if (objectResult.get("mauso").equals(null)) {
+								logger.error(
+										"***************: NULL mauso ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+							} else if (objectResult.get("kyhieu").equals(null)) {
+								logger.error(
+										"***************: NULL kyhieu ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+							} else if (objectResult.get("sohoadon").equals(null)) {
+								logger.error(
+										"***************: NULL sohoadon ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+							} else if (objectResult.get("ngayky").equals(null)) {
+								logger.error(
+										"***************: NULL ngayky ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+							} else {
+
+								long outNumLong = outNum.longValue();
+								try {
+									int x = dataOutputRepository.update4Filed(
+											
+											objectResult.getString("mauso"), objectResult.getString("kyhieu"),
+											objectResult.getString("sohoadon"),
+											new SimpleDateFormat("dd/MM/yyyy").parse(objectResult.getString("ngayky")),
+											outNumLong
+									);
+									if (x > 0) {
+										logger.info("***************: Ket qua UPDATE 4 truong la:   " + x
+												+ " Thanh cong UPDATE!!");
+									} else {
+										logger.error(
+												"***************: Ket qua UPDATE 4 truong la:   " + x + " That bai!!");
+									}
+
+								} catch (JSONException e) {
+									logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass());
+								} catch (ParseException e) {
+									logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass());
+								}
+								logger.info("***************: Ket thuc :***********************");
+								// Tang chi so cua indexOutNum len de ki lan tiep theo
+								indexListOutNum++;
+							}
+
+						} // end if
+					}
 
 				}
-
-			}
+			} // end for 197
 
 		} catch (IOException e) {
 			logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass() + "line: 179 ");
