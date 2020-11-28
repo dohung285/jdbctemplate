@@ -1,4 +1,11 @@
 
+
+mvn -DskipTests=true  package
+set JAVA_OPTS=%JAVA_OPTS% -Dfile.encoding=UTF-8
+URIEncoding="UTF-8"
+
+
+
 CREATE TABLE TB_OUT_HEADER
 ( 
 	DAT			VARCHAR2(8) NOT NULL,

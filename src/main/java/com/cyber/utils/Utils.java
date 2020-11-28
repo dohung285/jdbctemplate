@@ -25,99 +25,7 @@ public class Utils {
 
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
-    public static String SendDatahttps(String url, String inputsent, String auth) {
-        try {
-            X509TrustManager tm = new X509TrustManager() {
-                @Override
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-
-                public void checkServerTrusted(X509Certificate[] paramArrayOfX509Certificate, String paramString)
-                        throws CertificateException {
-
-                }
-
-                public void checkClientTrusted(X509Certificate[] paramArrayOfX509Certificate, String paramString)
-                        throws CertificateException {
-                }
-
-                @Override
-                public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
-                        throws CertificateException {
-                    // TODO Auto-generated method stub
-
-                }
-
-                @Override
-                public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
-                        throws CertificateException {
-                    // TODO Auto-generated method stub
-
-                }
-            };
-            SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(null, new TrustManager[]{tm}, null);
-            SSLContext.setDefault(ctx);
-            HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-            // conn.setSSLSocketFactory(ctx.getSocketFactory());
-            conn.setHostnameVerifier(new HostnameVerifier() {
-
-                @Override
-                public boolean verify(String paramString, SSLSession paramSSLSession) {
-                    return true;
-                }
-            });
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            if (auth == null || auth.trim().equals("")) {
-
-            } else {
-                conn.addRequestProperty("Authorization", auth);
-            }
-
-            conn.connect();
-
-            OutputStream os = conn.getOutputStream();
-            try {
-                os.write(inputsent.getBytes());
-            } catch (IOException e) {
-                logger.error("***************: Loi:  " + e.getMessage());
-                // TODO Auto-generated catch block
-                // e.printStackTrace();
-            }
-
-            os.flush();
-
-//			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-//				return "1";
-//			}
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                TokenUtils.getAccessToken();
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-            String output;
-            StringBuilder kq = new StringBuilder();
-
-            System.out.println("Output from Server .... \n");
-            while ((output = br.readLine()) != null) {
-                // System.out.println("Data output: "+output);
-                kq.append(output);
-            }
-
-            conn.disconnect();
-            return kq.toString();
-        } catch (Exception ex) {
-            logger.error("***************: Loi:  " + ex.getMessage());
-            System.out.println(ex.getMessage());
-            return "2";
-        }
-    }
-
-    public static String connectServer(String urlstr, String inputsent, String auth) {
+    public static String connectServer(String urlstr, String inputsent, String auth,String urlToken) {
         try {
             logger.info(urlstr);
             logger.info(auth);
@@ -143,7 +51,7 @@ public class Utils {
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 logger.error("***************: Loi :   " + 401);
-                TokenUtils.getAccessToken();
+                TokenUtils.getAccessToken(urlToken);
             }
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

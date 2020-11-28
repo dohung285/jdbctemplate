@@ -1,6 +1,8 @@
 package com.example.jdbctemplate;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,6 +36,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cyber.utils.FileUtils;
+import com.cyber.utils.GlobalValue;
 import com.cyber.utils.TokenUtils;
 import com.cyber.utils.Utils;
 import com.example.jdbctemplate.model.DataOutput;
@@ -51,17 +56,14 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 	@Autowired
 	Environment env;
 
-	private static final String FILENAME = "D:/maxOutNum.txt";
-	// private static final String FILENAME = "C:/maxOutNum.txt";
-	// private static final String FILENAME = "E:/maxOutNum.txt";
+	@Value("${fileMaxOutNum}")
+	private String FILENAME;
 
-//	private static final String FILEmaHD = "C:/LogAppJDBCTemplate/maHoaDon.txt";   
+	@Value("${fileMaHD}")
+	private String FILEmaHD;
 
-	// private static final String FILENAME = "maxOutNum.txt";
-	private static final String FILEmaHD = "D:/maHoaDon.txt";
-	private static final String FILEtoken = "D:/token.txt";
-	// private static final String FILEtoken = "C:/token.txt";
-	// private static final String FILEtoken = "E:/token.txt";
+	@Value("${urlGetToken}")
+	private String urlToken;
 
 	public static void main(String[] args) {
 		SpringApplication.run(JdbctemplateApplication.class, args);
@@ -69,25 +71,49 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 	@Override
 	public void run(String... args) throws Exception {
-		// myRunMethod();
-		System.out.println("doanhNghiepMST la: "+env.getProperty("doanhnghiepMst"));
-    	System.out.println("loaihoadonMa la: "+env.getProperty("loaihoadonMa"));
-    	System.out.println("mauso la: "+env.getProperty("mauso"));
-    	System.out.println("kyhieu la: "+env.getProperty("kyhieu"));
-    	System.out.println("timeCallback la: "+env.getProperty("timeCallback"));
-    	System.out.println("API gửi la: "+env.getProperty("urlGuiVaKyHoadonGocHSM"));
+//		GlobalValue goGlobalValue = new GlobalValue();
+//		goGlobalValue.setUrlToken(env.getProperty("urlGetToken")); // ,,
+//		goGlobalValue.setPassword(env.getProperty("mstPassword"));
+//		goGlobalValue.setUsername(env.getProperty("mstUsername"));
+//		goGlobalValue.setDoanhnghiepMstStatic(env.getProperty("doanhnghiepMst"));
+//
+//		System.out.println("TOKEN: " + goGlobalValue.urlGetTokenStatic);
+//
+//		if (FileUtils.tokenWS == null || FileUtils.tokenWS.isEmpty()) {
+//
+//			logger.info("***************: Lan dau chay => getToken   ");
+//			TokenUtils.getAccessToken(env.getProperty("urlGetToken"), env.getProperty("mstUsername"),
+//					env.getProperty("mstPassword"), env.getProperty("doanhnghiepMst"));
+//		}
+//
+//		System.out.println("doanhNghiepMST la: " + env.getProperty("doanhnghiepMst"));
+//		System.out.println("loaihoadonMa la: " + env.getProperty("loaihoadonMa"));
+//		System.out.println("mauso la: " + env.getProperty("mauso"));
+//		System.out.println("kyhieu la: " + env.getProperty("kyhieu"));
+//		System.out.println("timeCallback la: " + env.getProperty("timeCallback"));
+//		System.out.println("API gửi la: " + env.getProperty("urlGuiVaKyHoadonGocHSM"));
+//
+//		System.out.println("fileMaxOutNum gửi la: " + FILENAME);
+//		System.out.println("fileMaHD gửi la: " + FILEmaHD);
 
 	}
 
 	// Auto callback once every 5 minutes = 5 * 60 * 1000 millis
-	//@Scheduled(fixedRate = 30000L)
-//	@Scheduled(fixedRate = 5000L)
+	@Scheduled(fixedRate = 30000L)
 	private void myRunMethod() {
+		GlobalValue goGlobalValue = new GlobalValue();
+		goGlobalValue.setUrlToken(env.getProperty("urlGetToken"));
+		goGlobalValue.setPassword(env.getProperty("mstPassword"));
+		goGlobalValue.setUsername(env.getProperty("mstUsername"));
+		goGlobalValue.setDoanhnghiepMstStatic(env.getProperty("doanhnghiepMst"));
+
 		logger.info("*************************************: Bat dau chay app");
 
 		if (FileUtils.tokenWS == null || FileUtils.tokenWS.isEmpty()) {
+
 			logger.info("***************: Lan dau chay => getToken   ");
-			TokenUtils.getAccessToken();
+			TokenUtils.getAccessToken(env.getProperty("urlGetToken"), env.getProperty("mstUsername"),
+					env.getProperty("mstPassword"), env.getProperty("doanhnghiepMst"));
 		}
 
 		// lan dau tien chay ghi gia tri ra file
@@ -101,52 +127,58 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				long maxOutNum = dataOutputRepository.getMaxSequence();
 				FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
 				// CALL API DE LAY DU LIEU
-				logger.info(
-						"***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "
-								+ maxOutNum);
+				logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "+ maxOutNum);
 				listSource = dataOutputRepository.getData(maxOutNum, 0L);
 
 			} else {
 				logger.info("***************: File maxOutNum.txt da ton tai. ");
-				String strMaxOutNum = FileUtils.readFile(file);
-				// String strMaxOutNum = org.apache.commons.io.FileUtils.readFileToString(file);
-				if (strMaxOutNum == null) {
-					long maxOutNum = dataOutputRepository.getMaxSequence();
-					FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
-					String strMaxOutNumRecall = FileUtils.readFile(file);
-					long maxOldOutNum = 0;
-					try {
-						maxOldOutNum = Long.parseLong(strMaxOutNumRecall);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					long maxNewOutNum = dataOutputRepository.getMaxSequence();
-					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
-
-					// Call API - BILL - lay dc listSource
-					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
-					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
-				} else {
-
-					long maxOldOutNum = 0;
-					try {
-						maxOldOutNum = Long.parseLong(strMaxOutNum);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					long maxNewOutNum = dataOutputRepository.getMaxSequence();
-					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
-
-					// Call API - BILL - lay dc listSource
-					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
-					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
-				}
+//				String strMaxOutNum = FileUtils.readFile(file);
+//				// String strMaxOutNum = org.apache.commons.io.FileUtils.readFileToString(file);
+//				if (strMaxOutNum == null) {
+//					long maxOutNum = dataOutputRepository.getMaxSequence();
+//					FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
+//					String strMaxOutNumRecall = FileUtils.readFile(file);
+//					long maxOldOutNum = 0;
+//					try {
+//						maxOldOutNum = Long.parseLong(strMaxOutNumRecall);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//					long maxNewOutNum = dataOutputRepository.getMaxSequence();
+//					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
+//
+//					// Call API - BILL - lay dc listSource
+//					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
+//					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
+//				} else {
+//
+//					long maxOldOutNum = 0;
+//					try {
+//						maxOldOutNum = Long.parseLong(strMaxOutNum);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//					long maxNewOutNum = dataOutputRepository.getMaxSequence();
+//					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
+//
+//					// Call API - BILL - lay dc listSource
+//					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
+//					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
+//				}
+				
+				long maxOutNum = dataOutputRepository.getMaxSequence();
+				FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
+				// CALL API DE LAY DU LIEU
+				logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "+ maxOutNum);
+				listSource = dataOutputRepository.getData(maxOutNum, 0L);
+				
 
 			} // end else
 
 			if (listSource.size() == 0) {
 				logger.info(
 						"***************: listSource == null. Khong co du lieu thoa man 4 dieu kien! (ACC_MODEL,ACC_SYMBOL,ACC_NUMBER,ACC_DATE) == NULL");
+				return;
 			}
 
 			// List luu OutNum distinct
@@ -180,10 +212,34 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //                bodyRequest.setMauso("03XKNB/001");
 //                bodyRequest.setKyhieu("AA/20E");
 
-				bodyRequest.setDoanhnghiepMst("0300812669");
-				bodyRequest.setLoaihoadonMa("03XKNB");
-				bodyRequest.setMauso("03XKNB0/001");
-				bodyRequest.setKyhieu("AA/20E");
+//				bodyRequest.setDoanhnghiepMst("0300812669");
+//				bodyRequest.setLoaihoadonMa("03XKNB");
+//				bodyRequest.setMauso("03XKNB0/001");
+//				bodyRequest.setKyhieu("AA/20E");
+				if (env.getProperty("doanhnghiepMst") == null || env.getProperty("doanhnghiepMst").isEmpty()) {
+					logger.info(
+							"***************: Khong lay duoc thong tin trong file application.properties :  doanhnghiepMst");
+					return;
+				}
+				if (env.getProperty("loaihoadonMa") == null || env.getProperty("loaihoadonMa").isEmpty()) {
+					logger.info(
+							"***************: Khong lay duoc thong tin trong file application.properties :  loaihoadonMa");
+					return;
+				}
+				if (env.getProperty("mauso") == null || env.getProperty("mauso").isEmpty()) {
+					logger.info("***************: Khong lay duoc thong tin trong file application.properties :  mauso");
+					return;
+				}
+				if (env.getProperty("kyhieu") == null || env.getProperty("kyhieu").isEmpty()) {
+					logger.info(
+							"***************: Khong lay duoc thong tin trong file application.properties :  kyhieu");
+					return;
+				}
+
+				bodyRequest.setDoanhnghiepMst(env.getProperty("doanhnghiepMst"));
+				bodyRequest.setLoaihoadonMa(env.getProperty("loaihoadonMa"));
+				bodyRequest.setMauso(env.getProperty("mauso"));
+				bodyRequest.setKyhieu(env.getProperty("kyhieu"));
 
 				bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
 
@@ -228,6 +284,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 					// bodyRequest.setVanchuyen_giaohang(itemlistofoutnum.get(0).getNumberContract());
 //					bodyRequest.setVanchuyenKhoxuat(itemlistofoutnum.get(0).getReason());
 //					bodyRequest.setVanchuyenKhonhap(itemlistofoutnum.get(0).getForCompany());
+
 					bodyRequest.setVanchuyen_lydo(itemlistofoutnum.get(0).getReason());
 					bodyRequest.setVanchuyen_phuongthuc(itemlistofoutnum.get(0).getNumberCar());
 					bodyRequest.setVanchuyenKhoxuat("Công ty TNHH Việt Nam SAMHO");
@@ -239,7 +296,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 					bodyRequest.setTongtienCovat(0);
 
 					List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
-					int indexOfDetail=1;
+					int indexOfDetail = 1;
 					for (DataOutput itemfilter : itemlistofoutnum) {
 
 						Dschitiet ct = new Dschitiet();
@@ -252,7 +309,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 							return;
 
 						} else {
-							//set stt cho detail
+							// set stt cho detail
 							ct.setStt(indexOfDetail++);
 							ct.setTen(itemfilter.getRemar());
 							ct.setDonvitinh(itemfilter.getUom());
@@ -263,7 +320,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						lChitiet.add(ct);
 
 					}
-					indexOfDetail=1;
+					indexOfDetail = 1;
 					bodyRequest.setDschitiet(lChitiet);
 
 					String jsonbody = new Gson().toJson(bodyRequest);
@@ -276,7 +333,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //					}
 
 					String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
-							" Bearer " + FileUtils.tokenWS);
+							" Bearer " + FileUtils.tokenWS, env.getProperty("urlGetToken"));
 					logger.info("***************: Ket qua CALL API- BILL :  " + result);
 					if (!result.equals("3")) {
 						JSONObject json = new JSONObject(result);
@@ -314,7 +371,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 								);
 								if (x > 0) {
 									logger.info(
-											"***************: Ket qua UPDATE 4 truong la:   " + x + " Thanh cong!!");
+											"***************: Ket qua UPDATE 4 truong la:   " + x + " Thanh cong UPDATE!!");
 								} else {
 									logger.error("***************: Ket qua UPDATE 4 truong la:   " + x + " That bai!!");
 								}

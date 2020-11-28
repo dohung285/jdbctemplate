@@ -2,11 +2,13 @@ package com.cyber.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 
 import com.example.jdbctemplate.request.RequestAccount;
@@ -16,31 +18,31 @@ public class TokenUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(TokenUtils.class);
 
-	@Autowired
-	static Environment env;
 
-	public static void getAccessToken() {
+	public static void getAccessToken(String ...urlGetToken) {
+		
+		
+		GlobalValue globalValue = new GlobalValue();
+		globalValue.setUrlToken(urlGetToken[0]);
+		globalValue.setUsername(urlGetToken[1]);
+		globalValue.setPassword(urlGetToken[2]);
+		globalValue.setDoanhnghiepMstStatic(urlGetToken[3]);
 
-//		File file = new File("token.txt");
-	//	File file = new File("C:/LogAppJDBCTemplate/token.txt");
-//		if (!file.exists()) {
-//			logger.info("***************: File token.txt chua ton tai");
-//			try {
-//				file.createNewFile();
-//			} catch (IOException e) {
-//				logger.error("***************: File token.txt tao loi");
-//			}
-//		}
+		System.out.println("TOKEN: " + globalValue.urlGetTokenStatic);
+
 		RequestAccount reqAccount = new RequestAccount();
 
-		reqAccount.setDoanhnghiepMst("0300812669");
-		reqAccount.setUsername("0300812669@kws");
-		reqAccount.setPassword("12345678");
+		reqAccount.setDoanhnghiepMst(globalValue.doanhnghiepMstStatic);
+		reqAccount.setUsername(globalValue.usernameStatic);
+		reqAccount.setPassword(globalValue.passwordStatic);
 
 		String jsonBodyAccount = new Gson().toJson(reqAccount);
 		logger.info("***************: Thong tin gui di de lay ACCESS_TOKEN :   " + jsonBodyAccount);
-		String result = Utils.connectServer("http://hddtws.esamho.com/api/services/hddtws/Authentication/GetToken",
-				jsonBodyAccount, null);
+		if (globalValue.urlGetTokenStatic == null  || globalValue.urlGetTokenStatic.isEmpty()) {
+			logger.info("***************: Khong lay duoc API Gettoken ");
+			return;
+		}
+		String result = Utils.connectServer(globalValue.urlGetTokenStatic, jsonBodyAccount, null,urlGetToken[0]);
 
 		JSONObject json = new JSONObject(result);
 		JSONObject objectResult = new JSONObject();
@@ -48,7 +50,7 @@ public class TokenUtils {
 		logger.info("***************: Lay duoc access_token: " + objectResult.getString("access_token"));
 		System.out.println(objectResult.getString("access_token"));
 		// Luu token vào file
-		//FileUtils.writeFile(file, false, objectResult.getString("access_token"));
+		// FileUtils.writeFile(file, false, objectResult.getString("access_token"));
 		FileUtils.tokenWS = objectResult.getString("access_token");
 		logger.info("***************: Luu access_token vao bien static thanh cong ");
 
