@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -193,9 +194,13 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 				}
 				outindex = item.getOutNum();
 			}
+			// loai bo cac gia tri trung trong listout
+			ArrayList<BigDecimal> listNewOut = removeDuplicates(listout);
+			System.out.println("listNewOut: "+listNewOut);
 
 			int indexListOutNum = 0;
-			for (BigDecimal itemoutnum : listout) {
+//			for (BigDecimal itemoutnum : listout) {
+			for (BigDecimal itemoutnum : listNewOut) {
 				BigDecimal outNum = new BigDecimal(0);
 				outNum = itemoutnum;
 
@@ -271,7 +276,6 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 							) {
 								logger.info("***************:NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
-								return;
 
 							} else {
 								// set stt cho detail
@@ -293,7 +297,8 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 						String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
 								" Bearer " + FileUtils.tokenWS, env.getProperty("urlGetToken"));
-						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  "+outNum+" ------  " + result);
+						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + outNum + " ------  "
+								+ result);
 						if (!result.equals("3")) {
 							JSONObject json = new JSONObject(result);
 							JSONObject objectResult = new JSONObject();
@@ -316,12 +321,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 								long outNumLong = outNum.longValue();
 								try {
 									int x = dataOutputRepository.update4Filed(
-											
+
 											objectResult.getString("mauso"), objectResult.getString("kyhieu"),
 											objectResult.getString("sohoadon"),
 											new SimpleDateFormat("dd/MM/yyyy").parse(objectResult.getString("ngayky")),
-											outNumLong
-									);
+											outNumLong);
 									if (x > 0) {
 										logger.info("***************: Ket qua UPDATE 4 truong la:   " + x
 												+ " Thanh cong UPDATE!!");
@@ -381,4 +385,26 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 		}
 		return formattedDate;
 	}
+
+	// Function to remove duplicates from an ArrayList
+	public static <T> ArrayList<T> removeDuplicates(List<T> list) {
+
+		// Create a new ArrayList
+		ArrayList<T> newList = new ArrayList<T>();
+
+		// Traverse through the first list
+		for (T element : list) {
+
+			// If this element is not present in newList
+			// then add it
+			if (!newList.contains(element)) {
+
+				newList.add(element);
+			}
+		}
+
+		// return the new list
+		return newList;
+	}
+
 }

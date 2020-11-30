@@ -5,6 +5,8 @@ set JAVA_OPTS=%JAVA_OPTS% -Dfile.encoding=UTF-8
 URIEncoding="UTF-8"
 
 
+mvn install -Dmaven.test.skip=true
+
 
 CREATE TABLE TB_OUT_HEADER
 ( 
