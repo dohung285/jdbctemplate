@@ -295,8 +295,12 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						String jsonbody = new Gson().toJson(bodyRequest);
 						logger.info("***************: Thong tin gui di la:   " + jsonbody);
 
-						String result = Utils.connectServer(env.getProperty("urlGuiVaKyHoadonGocHSM"), jsonbody,
-								" Bearer " + FileUtils.tokenWS, env.getProperty("urlGetToken"));
+						String result = Utils.connectServer(
+								env.getProperty("urlGuiVaKyHoadonGocHSM"),
+								jsonbody,
+								" Bearer " + FileUtils.tokenWS,
+								env.getProperty("urlGetToken")
+								);
 						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + outNum + " ------  "
 								+ result);
 						if (!result.equals("3")) {

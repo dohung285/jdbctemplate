@@ -82,7 +82,7 @@ public class DataOutputRepository {
 
 
 
-
+//
 //	// Update 4 truong theo yeu cau
 ////	ACC_MODEL 	ACC_SYMBOL	ACC_NUMBER 	ACC_DATE
 //	public int update4Filed(String accModel, String accSymbol, String accNumberl, Date accDate, long outNum) {
@@ -120,8 +120,7 @@ public class DataOutputRepository {
 //		builder.append(" 	AND A.ACC_SYMBOL IS  NULL 	");
 //		builder.append(" 	AND A.ACC_NUMBER IS  NULL 	");
 //		builder.append(" 	AND A.ACC_DATE IS  NULL ");
-//		
-//		builder.append("	AND A.OUT_NUM <= ?	");
+//		builder.append("	AND A.OUT_NUM <= ? AND 	");
 //		builder.append("		GROUP BY 	");
 //		builder.append("	         A.DAT	");
 //		builder.append("	        ,A.OUT_NUM	");
@@ -137,6 +136,8 @@ public class DataOutputRepository {
 //		return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper(DataOutput.class),
 //				new Object[] { maxOldOutNum });
 //
+//		
+//		
 //	}
 
 
