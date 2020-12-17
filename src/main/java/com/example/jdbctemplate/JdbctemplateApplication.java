@@ -135,39 +135,6 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 			} else {
 				logger.info("***************: File maxOutNum.txt da ton tai. ");
-//				String strMaxOutNum = FileUtils.readFile(file);
-//				// String strMaxOutNum = org.apache.commons.io.FileUtils.readFileToString(file);
-//				if (strMaxOutNum == null) {
-//					long maxOutNum = dataOutputRepository.getMaxSequence();
-//					FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
-//					String strMaxOutNumRecall = FileUtils.readFile(file);
-//					long maxOldOutNum = 0;
-//					try {
-//						maxOldOutNum = Long.parseLong(strMaxOutNumRecall);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//					long maxNewOutNum = dataOutputRepository.getMaxSequence();
-//					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
-//
-//					// Call API - BILL - lay dc listSource
-//					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
-//					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
-//				} else {
-//
-//					long maxOldOutNum = 0;
-//					try {
-//						maxOldOutNum = Long.parseLong(strMaxOutNum);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//					long maxNewOutNum = dataOutputRepository.getMaxSequence();
-//					logger.info("***************: " + "OLD: " + maxOldOutNum + " NEW: " + maxNewOutNum);
-//
-//					// Call API - BILL - lay dc listSource
-//					logger.info("***************: dataOutputRepository.getData(maxOldOutNum, maxNewOutNum). ");
-//					listSource = dataOutputRepository.getData(maxOldOutNum, maxNewOutNum);
-//				}
 
 				long maxOutNum = dataOutputRepository.getMaxSequence();
 				FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
@@ -226,12 +193,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 					logger.info(
 							"***************: Khong lay duoc thong tin trong file application.properties :  kyhieu");
 
-				} else {
+				} else { // lấy các thông tin trong file properties
 					bodyRequest.setDoanhnghiepMst(env.getProperty("doanhnghiepMst"));
 					bodyRequest.setLoaihoadonMa(env.getProperty("loaihoadonMa"));
 					bodyRequest.setMauso(env.getProperty("mauso"));
 					bodyRequest.setKyhieu(env.getProperty("kyhieu"));
-
 					bodyRequest.setMaHoadon(String.valueOf(listout.get(indexListOutNum)));
 
 					if (Objects.isNull(itemlistofoutnum.get(0).getDat())
@@ -289,7 +255,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 							lChitiet.add(ct);
 
 						}
-						indexOfDetail = 1;
+//						indexOfDetail = 1; //listout.get(indexListOutNum
 						bodyRequest.setDschitiet(lChitiet);
 
 						String jsonbody = new Gson().toJson(bodyRequest);
@@ -301,7 +267,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 								" Bearer " + FileUtils.tokenWS,
 								env.getProperty("urlGetToken")
 								);
-						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + outNum + " ------  "
+						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + listout.get(indexListOutNum) + " ------  "
 								+ result);
 						if (!result.equals("3")) {
 							JSONObject json = new JSONObject(result);
@@ -322,7 +288,8 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 										"***************: NULL ngayky ==> Khong CALL duoc API UPDATE 4 file bang Header ");
 							} else {
 
-								long outNumLong = outNum.longValue();
+							//	long outNumLong = outNum.longValue();
+								long outNumLong = listout.get(indexListOutNum).longValue();
 								try {
 									int x = dataOutputRepository.update4Filed(
 
@@ -351,7 +318,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 						} // end if
 					}
 
-				}
+				} //// END lấy các thông tin trong file properties
 			} // end for 197
 
 		} catch (IOException e) {
