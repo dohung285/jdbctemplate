@@ -269,6 +269,9 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 								);
 						logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + listout.get(indexListOutNum) + " ------  "
 								+ result);
+						if(result.equals("4")) {
+							return;
+						}
 						if (!result.equals("3")) {
 							JSONObject json = new JSONObject(result);
 							JSONObject objectResult = new JSONObject();
