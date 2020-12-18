@@ -51,7 +51,9 @@ public class Utils {
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 logger.error("***************: Loi :   " + 401);
-                TokenUtils.getAccessToken(urlToken);
+                FileUtils.setTokenWS(null);
+               
+//                TokenUtils.getAccessToken(urlToken);
                 return "4";
             }
 

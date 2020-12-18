@@ -19,6 +19,10 @@ public class FileUtils {
 
 	public static String tokenWS = "";
 	
+	public static void setTokenWS(String tokenWS) {
+		FileUtils.tokenWS = tokenWS;
+	}
+
 	// Ghi gile
 	public static void writeFile(File file, boolean flag, String value) {
 		//logger.info("***************: CALL-METHOD ghi file ");
