@@ -92,6 +92,7 @@ public class DataOutputRepository {
 		StringBuilder builder = new StringBuilder("");
 
 		builder.append("	select 	A.DAT						");
+		builder.append("	        ,B.OUT_LINE_NUM							");
 		builder.append("	        ,A.OUT_NUM							");
 		builder.append("			, 'CÔNG TY TNHH VIỆT NAM SAMHO'  AS XUAT_KHO					");
 		builder.append("			,A.REASON					");
@@ -139,7 +140,7 @@ public class DataOutputRepository {
 
 
 
-//
+
 //	// Update 4 truong theo yeu cau
 ////	ACC_MODEL 	ACC_SYMBOL	ACC_NUMBER 	ACC_DATE
 //	public int update4Filed(String accModel, String accSymbol, String accNumberl, Date accDate, long outNum) {
@@ -154,10 +155,9 @@ public class DataOutputRepository {
 //	}
 //
 //	public List<DataOutput> getData(long maxOldOutNum, long maxNewOutNum) {
-//
 //		StringBuilder builder = new StringBuilder("");
-//
 //		builder.append("	select 	A.DAT						");
+//		builder.append("	        ,B.OUT_LINE_NUM							");
 //		builder.append("	        ,A.OUT_NUM							");
 //		builder.append("			, 'CONG TY TNHH VIEÄT NAM SAMHO'  AS XUAT_KHO					");
 //		builder.append("			,A.REASON					");
@@ -192,9 +192,6 @@ public class DataOutputRepository {
 //		System.out.println("builder: "+builder.toString());
 //		return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper(DataOutput.class),
 //				new Object[] { maxOldOutNum });
-//
-//		
-//		
 //	}
 
 

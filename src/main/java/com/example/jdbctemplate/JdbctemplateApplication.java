@@ -114,16 +114,12 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                 long maxOutNum = dataOutputRepository.getMaxSequence();
                 FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
                 // CALL API DE LAY DU LIEU
-                logger.info(
-                        "***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "
-                                + maxOutNum);
+                logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = " + maxOutNum);
                 listSource = dataOutputRepository.getData(maxOutNum, 0L);
-
             } // end else
 
             if (listSource.size() == 0) {
-                logger.info(
-                        "***************: listSource == null. Khong co du lieu thoa man 4 dieu kien! (ACC_MODEL,ACC_SYMBOL,ACC_NUMBER,ACC_DATE) == NULL");
+                logger.info("***************: listSource == null. Khong co du lieu thoa man 4 dieu kien! (ACC_MODEL,ACC_SYMBOL,ACC_NUMBER,ACC_DATE) == NULL");
                 return;
             }
 
@@ -151,6 +147,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                         .filter(c -> c.getOutNum().compareTo(itemoutnum) == 0).collect(Collectors.toList());
                 ReuqestObj bodyRequest = new ReuqestObj();
 
+                System.out.println("itemlistofoutnum: "+itemlistofoutnum);
 
                 if (env.getProperty("doanhnghiepMst") == null || env.getProperty("doanhnghiepMst").isEmpty()) {
                     logger.info("***************: Khong lay duoc thong tin trong file application.properties :  doanhnghiepMst");
@@ -192,9 +189,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                     } else {
 
                         bodyRequest.setNgaylap(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat())); // convert
-                        bodyRequest.setVanchuyenNgayxuat(
-                                convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
-
+                        bodyRequest.setVanchuyenNgayxuat(convertStringToStringFormatDate(itemlistofoutnum.get(0).getDat()));
                         bodyRequest.setVanchuyen_lydo(itemlistofoutnum.get(0).getReason());
                         bodyRequest.setVanchuyen_phuongthuc(itemlistofoutnum.get(0).getNumberCar());
                         bodyRequest.setVanchuyenKhoxuat("Công ty TNHH Việt Nam SAMHO");
@@ -211,7 +206,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 
                         if (itemlistofoutnum.size() != lChitiet.size()) {
-                            logger.info("***************:Error! Co ban ghi trong Detail nhap thieu ( hoac ko hop le ) tai OUT_NUM := " + outNum);
+                            logger.info("***************:Error! Co ban ghi trong Detail nhap thieu ( hoac ko hop le ) tai OUT_NUM := " + outNum+ " outLineNum= "+itemlistofoutnum.get(0).getOutLineNum());
                         } else {
                             bodyRequest.setDschitiet(lChitiet);
                             String jsonbody = new Gson().toJson(bodyRequest);

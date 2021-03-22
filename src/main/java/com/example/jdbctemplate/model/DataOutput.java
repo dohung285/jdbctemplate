@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class DataOutput {
 
 	private String dat;
+	private BigDecimal outLineNum;
 	private BigDecimal outNum;
 	private String reason;
 	private String forCompany;
@@ -16,6 +17,14 @@ public class DataOutput {
 	private String accFlag;
 	private String printFlag;
 	private Integer sum;
+
+	public BigDecimal getOutLineNum() {
+		return outLineNum;
+	}
+
+	public void setOutLineNum(BigDecimal outLineNum) {
+		this.outLineNum = outLineNum;
+	}
 
 	public DataOutput() {
 		super();
@@ -117,11 +126,30 @@ public class DataOutput {
 		this.sum = sum;
 	}
 
+//	@Override
+//	public String toString() {
+//		return "DataOutput [dat=" + dat + ", outNum=" + outNum + ", reason=" + reason + ", forCompany=" + forCompany
+//				+ ", uom=" + uom + ", qty=" + qty + ", remar=" + remar + ", numberContract=" + numberContract
+//				+ ", accFlag=" + accFlag + ", printFlag=" + printFlag + ", sum=" + sum + "]";
+//	}
+
+
 	@Override
 	public String toString() {
-		return "DataOutput [dat=" + dat + ", outNum=" + outNum + ", reason=" + reason + ", forCompany=" + forCompany
-				+ ", uom=" + uom + ", qty=" + qty + ", remar=" + remar + ", numberContract=" + numberContract
-				+ ", accFlag=" + accFlag + ", printFlag=" + printFlag + ", sum=" + sum + "]";
+		return "DataOutput{" +
+				"dat='" + dat + '\'' +
+				", outLineNum=" + outLineNum +
+				", outNum=" + outNum +
+				", reason='" + reason + '\'' +
+				", forCompany='" + forCompany + '\'' +
+				", uom='" + uom + '\'' +
+				", qty=" + qty +
+				", remar='" + remar + '\'' +
+				", numberContract='" + numberContract + '\'' +
+				", numberCar='" + numberCar + '\'' +
+				", accFlag='" + accFlag + '\'' +
+				", printFlag='" + printFlag + '\'' +
+				", sum=" + sum +
+				'}';
 	}
-
 }
