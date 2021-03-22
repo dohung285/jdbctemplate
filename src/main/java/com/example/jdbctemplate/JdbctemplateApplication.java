@@ -105,7 +105,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                 long maxOutNum = dataOutputRepository.getMaxSequence();
                 FileUtils.writeFile(file, false, String.valueOf(maxOutNum));
                 // CALL API DE LAY DU LIEU
-                logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = "+ maxOutNum);
+                logger.info("***************: CALL API dataOutputRepository.getData(maxOutNum, 0L). lay duoc maxOutNum = " + maxOutNum);
                 listSource = dataOutputRepository.getData(maxOutNum, 0L);
 
             } else {
@@ -146,9 +146,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                 BigDecimal outNum = new BigDecimal(0);
                 outNum = itemoutnum;
 
+                //Lấy ra danh sách detail thuộc về header
                 List<DataOutput> itemlistofoutnum = listSource.stream()
                         .filter(c -> c.getOutNum().compareTo(itemoutnum) == 0).collect(Collectors.toList());
                 ReuqestObj bodyRequest = new ReuqestObj();
+
 
                 if (env.getProperty("doanhnghiepMst") == null || env.getProperty("doanhnghiepMst").isEmpty()) {
                     logger.info(
@@ -210,37 +212,37 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                         int indexOfDetail = 1;
                         //Kiểm tra xem cái itemlistofoutnum có thỏa mãn diều kiện là khác null của các phần tử cần check ko?
 
-                        boolean checkListOfOutNumNotNull = checkListOfOutNumNotNull(itemlistofoutnum,outNum);
-
-                        for (DataOutput itemfilter : itemlistofoutnum) {
-
+//                        boolean checkListOfOutNumNotNull = checkListOfOutNumNotNull(itemlistofoutnum,outNum);
+                        for (int i = 0; i < itemlistofoutnum.size(); i++) {
                             Dschitiet ct = new Dschitiet();
-                            if (Objects.isNull(itemfilter.getRemar()) || Objects.isNull(itemfilter.getUom())
-                                    || Objects.isNull(itemfilter.getQty()) || itemfilter.getRemar().isEmpty()
-                                    || itemfilter.getUom().isEmpty()
-
+                            if (Objects.isNull(itemlistofoutnum.get(i).getRemar()) ||
+                                    Objects.isNull(itemlistofoutnum.get(i).getUom()) ||
+                                    Objects.isNull(itemlistofoutnum.get(i).getQty()) ||
+                                    itemlistofoutnum.get(i).getRemar().isEmpty() ||
+                                    itemlistofoutnum.get(i).getUom().isEmpty()
                             ) {
-                                logger.info("***************:NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
-
+                                logger.info("***************:Error! NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
+                                continue;
                             } else {
                                 // set stt cho detail
                                 ct.setStt(indexOfDetail++);
-                                ct.setTen(itemfilter.getRemar());
-                                ct.setDonvitinh(itemfilter.getUom());
-                                ct.setSoluong(itemfilter.getQty());
+                                ct.setTen(itemlistofoutnum.get(i).getRemar());
+                                ct.setDonvitinh(itemlistofoutnum.get(i).getUom());
+                                ct.setSoluong(itemlistofoutnum.get(i).getQty());
                                 ct.setVanchuyen_loai(1);
                             }
-
                             lChitiet.add(ct);
-
                         }
+
 //						indexOfDetail = 1; //listout.get(indexListOutNum
-                        bodyRequest.setDschitiet(lChitiet);
+                        if (itemlistofoutnum.size() != lChitiet.size()) {
+                            logger.info("***************:Error! Co ban ghi trong Detail nhap thieu ( hoac ko hop le ) tai OUT_NUM := " + outNum);
+                        } else {
+                            bodyRequest.setDschitiet(lChitiet);
+                            String jsonbody = new Gson().toJson(bodyRequest);
+                            logger.info("***************: Thong tin gui di la:   " + jsonbody);
 
-                        String jsonbody = new Gson().toJson(bodyRequest);
-                        logger.info("***************: Thong tin gui di la:   " + jsonbody);
-
-                        String result = null;
+                            String result = null;
 
 //						String result = Utils.connectServer(
 //								env.getProperty("urlGuiVaKyHoadonGocHSM"),
@@ -248,60 +250,61 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 //								" Bearer " + FileUtils.tokenWS,
 //								env.getProperty("urlGetToken")
 //								);
-                        logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + listout.get(indexListOutNum) + " ------  "
-                                + result);
-                        if (result.equals("4")) {
-                            return;
-                        }
-                        if (!result.equals("3")) {
-                            JSONObject json = new JSONObject(result);
-                            JSONObject objectResult = new JSONObject();
-                            objectResult = json.getJSONObject("result");
-
-                            if (objectResult.get("mauso").equals(null)) {
-                                logger.error(
-                                        "***************: NULL mauso ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-                            } else if (objectResult.get("kyhieu").equals(null)) {
-                                logger.error(
-                                        "***************: NULL kyhieu ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-                            } else if (objectResult.get("sohoadon").equals(null)) {
-                                logger.error(
-                                        "***************: NULL sohoadon ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-                            } else if (objectResult.get("ngayky").equals(null)) {
-                                logger.error(
-                                        "***************: NULL ngayky ==> Khong CALL duoc API UPDATE 4 file bang Header ");
-                            } else {
-
-                                //	long outNumLong = outNum.longValue();
-                                long outNumLong = listout.get(indexListOutNum).longValue();
-                                try {
-                                    int x = dataOutputRepository.update4Filed(
-
-                                            objectResult.getString("mauso"), objectResult.getString("kyhieu"),
-                                            objectResult.getString("sohoadon"),
-                                            new SimpleDateFormat("dd/MM/yyyy").parse(objectResult.getString("ngayky")),
-                                            outNumLong);
-                                    if (x > 0) {
-                                        logger.info("***************: Ket qua UPDATE 4 truong la:   " + x
-                                                + " Thanh cong UPDATE!!");
-                                    } else {
-                                        logger.error(
-                                                "***************: Ket qua UPDATE 4 truong la:   " + x + " That bai!!");
-                                    }
-
-                                } catch (JSONException e) {
-                                    logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass());
-                                } catch (ParseException e) {
-                                    logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass());
-                                }
-                                logger.info("***************: Ket thuc :***********************");
-                                // Tang chi so cua indexOutNum len de ki lan tiep theo
-                                indexListOutNum++;
+                            logger.info("***************: Ket qua CALL API- BILL voi ma_hoadon=:  " + listout.get(indexListOutNum) + " ------  "
+                                    + result);
+                            if (result.equals("4")) {
+                                return;
                             }
+                            if (!result.equals("3")) {
+                                JSONObject json = new JSONObject(result);
+                                JSONObject objectResult = new JSONObject();
+                                objectResult = json.getJSONObject("result");
 
-                        } // end if
+                                if (objectResult.get("mauso").equals(null)) {
+                                    logger.error(
+                                            "***************: NULL mauso ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+                                } else if (objectResult.get("kyhieu").equals(null)) {
+                                    logger.error(
+                                            "***************: NULL kyhieu ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+                                } else if (objectResult.get("sohoadon").equals(null)) {
+                                    logger.error(
+                                            "***************: NULL sohoadon ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+                                } else if (objectResult.get("ngayky").equals(null)) {
+                                    logger.error(
+                                            "***************: NULL ngayky ==> Khong CALL duoc API UPDATE 4 file bang Header ");
+                                } else {
+
+                                    //	long outNumLong = outNum.longValue();
+                                    long outNumLong = listout.get(indexListOutNum).longValue();
+                                    try {
+                                        int x = dataOutputRepository.update4Filed(
+
+                                                objectResult.getString("mauso"), objectResult.getString("kyhieu"),
+                                                objectResult.getString("sohoadon"),
+                                                new SimpleDateFormat("dd/MM/yyyy").parse(objectResult.getString("ngayky")),
+                                                outNumLong);
+                                        if (x > 0) {
+                                            logger.info("***************: Ket qua UPDATE 4 truong la:   " + x
+                                                    + " Thanh cong UPDATE!!");
+                                        } else {
+                                            logger.error(
+                                                    "***************: Ket qua UPDATE 4 truong la:   " + x + " That bai!!");
+                                        }
+
+                                    } catch (JSONException e) {
+                                        logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass());
+                                    } catch (ParseException e) {
+                                        logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass());
+                                    }
+                                    logger.info("***************: Ket thuc :***********************");
+                                    // Tang chi so cua indexOutNum len de ki lan tiep theo
+                                    indexListOutNum++;
+                                }
+                            } // end if
+                        }
+
+
                     }
-
                 } //// END lấy các thông tin trong file properties
             } // end for 197
 
