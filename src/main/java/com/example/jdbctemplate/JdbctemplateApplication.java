@@ -153,13 +153,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
 
                 if (env.getProperty("doanhnghiepMst") == null || env.getProperty("doanhnghiepMst").isEmpty()) {
-                    logger.info(
-                            "***************: Khong lay duoc thong tin trong file application.properties :  doanhnghiepMst");
+                    logger.info("***************: Khong lay duoc thong tin trong file application.properties :  doanhnghiepMst");
 
                 }
                 if (env.getProperty("loaihoadonMa") == null || env.getProperty("loaihoadonMa").isEmpty()) {
-                    logger.info(
-                            "***************: Khong lay duoc thong tin trong file application.properties :  loaihoadonMa");
+                    logger.info("***************: Khong lay duoc thong tin trong file application.properties :  loaihoadonMa");
 
                 }
                 if (env.getProperty("mauso") == null || env.getProperty("mauso").isEmpty()) {
@@ -167,8 +165,7 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
 
                 }
                 if (env.getProperty("kyhieu") == null || env.getProperty("kyhieu").isEmpty()) {
-                    logger.info(
-                            "***************: Khong lay duoc thong tin trong file application.properties :  kyhieu");
+                    logger.info("***************: Khong lay duoc thong tin trong file application.properties :  kyhieu");
 
                 } else { // lấy các thông tin trong file properties
                     bodyRequest.setDoanhnghiepMst(env.getProperty("doanhnghiepMst"));
@@ -208,33 +205,11 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
                         bodyRequest.setTienthue(0);
                         bodyRequest.setTongtienCovat(0);
 
-                        List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
-                        int indexOfDetail = 1;
+
                         //Kiểm tra xem cái itemlistofoutnum có thỏa mãn diều kiện là khác null của các phần tử cần check ko?
+                        List<Dschitiet> lChitiet = checkExistNullElementAndAddDetail(itemlistofoutnum,outNum);
 
-//                        boolean checkListOfOutNumNotNull = checkListOfOutNumNotNull(itemlistofoutnum,outNum);
-                        for (int i = 0; i < itemlistofoutnum.size(); i++) {
-                            Dschitiet ct = new Dschitiet();
-                            if (Objects.isNull(itemlistofoutnum.get(i).getRemar()) ||
-                                    Objects.isNull(itemlistofoutnum.get(i).getUom()) ||
-                                    Objects.isNull(itemlistofoutnum.get(i).getQty()) ||
-                                    itemlistofoutnum.get(i).getRemar().isEmpty() ||
-                                    itemlistofoutnum.get(i).getUom().isEmpty()
-                            ) {
-                                logger.info("***************:Error! NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
-                                continue;
-                            } else {
-                                // set stt cho detail
-                                ct.setStt(indexOfDetail++);
-                                ct.setTen(itemlistofoutnum.get(i).getRemar());
-                                ct.setDonvitinh(itemlistofoutnum.get(i).getUom());
-                                ct.setSoluong(itemlistofoutnum.get(i).getQty());
-                                ct.setVanchuyen_loai(1);
-                            }
-                            lChitiet.add(ct);
-                        }
 
-//						indexOfDetail = 1; //listout.get(indexListOutNum
                         if (itemlistofoutnum.size() != lChitiet.size()) {
                             logger.info("***************:Error! Co ban ghi trong Detail nhap thieu ( hoac ko hop le ) tai OUT_NUM := " + outNum);
                         } else {
@@ -312,6 +287,33 @@ public class JdbctemplateApplication extends SpringBootServletInitializer implem
             logger.error("***************: Loi : " + e.getMessage() + "== " + e.getClass() + "line: 179 ");
             e.printStackTrace();
         }
+
+    }
+
+    private List<Dschitiet> checkExistNullElementAndAddDetail(List<DataOutput> itemlistofoutnum,BigDecimal outNum) {
+        List<Dschitiet> lChitiet = new ArrayList<Dschitiet>();
+        int indexOfDetail = 1;
+        for (int i = 0; i < itemlistofoutnum.size(); i++) {
+            Dschitiet ct = new Dschitiet();
+            if (Objects.isNull(itemlistofoutnum.get(i).getRemar()) ||
+                    Objects.isNull(itemlistofoutnum.get(i).getUom()) ||
+                    Objects.isNull(itemlistofoutnum.get(i).getQty()) ||
+                    itemlistofoutnum.get(i).getRemar().isEmpty() ||
+                    itemlistofoutnum.get(i).getUom().isEmpty()
+            ) {
+                logger.info("***************:Error! NULL o TB_OUT_N_DETAIL  tai OUT_NUM := " + outNum);
+                continue;
+            } else {
+                // set stt cho detail
+                ct.setStt(indexOfDetail++);
+                ct.setTen(itemlistofoutnum.get(i).getRemar());
+                ct.setDonvitinh(itemlistofoutnum.get(i).getUom());
+                ct.setSoluong(itemlistofoutnum.get(i).getQty());
+                ct.setVanchuyen_loai(1);
+            }
+            lChitiet.add(ct);
+        }
+        return lChitiet;
 
     }
 
